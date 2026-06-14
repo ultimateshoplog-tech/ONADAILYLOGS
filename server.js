@@ -12,8 +12,9 @@ const PORT = process.env.PORT || 5005;
 const isProd = process.env.NODE_ENV === 'production';
 
 const uploadPath = path.resolve(
-  process.env.UPLOAD_PATH ||
-  (process.env.VERCEL === '1' ? '/tmp/uploads' : path.join(__dirname, 'uploads'))
+  process.env.VERCEL === '1'
+    ? '/tmp/uploads'
+    : (process.env.UPLOAD_PATH || path.join(__dirname, 'uploads'))
 );
 
 if (!fs.existsSync(uploadPath)) {

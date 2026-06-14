@@ -4,11 +4,9 @@ const authMiddleware = require('../middleware/auth');
 const adminOnly = require('../middleware/adminOnly');
 const path = require('path');
 
-const uploadsBasePath = process.env.UPLOAD_PATH
-  ? path.resolve(process.env.UPLOAD_PATH)
-  : (process.env.VERCEL === '1'
-    ? '/tmp/uploads'
-    : path.join(__dirname, '../uploads'));
+const uploadsBasePath = process.env.VERCEL === '1'
+  ? '/tmp/uploads'
+  : (process.env.UPLOAD_PATH ? path.resolve(process.env.UPLOAD_PATH) : path.join(__dirname, '../uploads'));
 
 const fs = require('fs');
 if (!fs.existsSync(uploadsBasePath)) {
