@@ -53,6 +53,7 @@ const devOrigins = [
 const prodOrigins = [
   'https://ondailylogs.store',
   'https://www.ondailylogs.store',
+  'https://onadailylogs.vercel.app',          // primary Vercel deployment
   ...(process.env.ALLOWED_ORIGINS || '')
     .split(',')
     .map(o => o.trim())
@@ -65,6 +66,8 @@ app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (mobile apps, curl, server-to-server)
     if (!origin) return callback(null, true);
+    // Allow any Vercel preview deployment URL (*.vercel.app)
+    if (origin.endsWith('.vercel.app')) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
     callback(new Error(`CORS: origin '${origin}' not allowed.`));
   },
