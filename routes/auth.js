@@ -32,10 +32,14 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Disposable or temporary emails are not allowed.' });
     }
 
-    // Verify MX records to block completely fake domains
+    // Verify MX records to block completely fake domains (with a 2-second timeout to prevent serverless hang)
     const dns = require('dns').promises;
     try {
-      const mx = await dns.resolveMx(emailDomain);
+      const dnsPromise = dns.resolveMx(emailDomain);
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('DNS_TIMEOUT')), 2000)
+      );
+      const mx = await Promise.race([dnsPromise, timeoutPromise]);
       if (!mx || mx.length === 0) {
         return res.status(400).json({ success: false, message: 'This email domain has no valid mail servers (MX records).' });
       }
@@ -43,6 +47,7 @@ router.post('/register', async (req, res) => {
       if (dnsErr.code === 'ENOTFOUND' || dnsErr.code === 'ENODATA') {
         return res.status(400).json({ success: false, message: 'Email domain does not exist or does not accept mail.' });
       }
+      console.warn(`DNS MX check bypassed for ${emailDomain}:`, dnsErr.message);
     }
 
     if (username.length < 3 || username.length > 30) {
