@@ -9,7 +9,7 @@ const router = express.Router();
 // Constants
 const TOKEN_TTL_SECS = 60;   // reveal token valid for 60 seconds
 const RATE_LIMIT_MAX = 8;    // max reveal requests per order per hour
-const REVEAL_FEE     = 350;  // $350 deducted each time credentials are revealed
+const REVEAL_FEE     = 0;  // No reveal fee
 
 async function getUserBalance(userId) {
   try {
@@ -318,21 +318,9 @@ router.get('/:id', authMiddleware, async (req, res) => {
 });
 
 // ─── Step 1: Request a one-time reveal token ──────────────────────────────────
-// User must have ≥ $350 balance. A $350 fee is charged on Step 2 when token is redeemed.
+// Free to reveal for purchased orders.
 router.post('/:id/request-credentials', authMiddleware, async (req, res) => {
   try {
-    // Balance gate: must have at least $350
-    const balance = await getUserBalance(req.user.id);
-    if (balance < REVEAL_FEE) {
-      return res.status(402).json({
-        success: false,
-        activation_required: true,
-        message: `You need a balance of $${REVEAL_FEE.toFixed(2)} to unlock credentials. Your current balance is $${balance.toFixed(2)}. Please deposit $${(REVEAL_FEE - balance).toFixed(2)} more.`,
-        balance,
-        required: REVEAL_FEE,
-        remaining: parseFloat((REVEAL_FEE - balance).toFixed(2)),
-      });
-    }
 
     // Verify order belongs to this user
     const result = await pool.query(
@@ -391,22 +379,9 @@ router.post('/:id/request-credentials', authMiddleware, async (req, res) => {
 });
 
 
-// ─── Step 2: Redeem token — deducts $350 and returns credentials ──────────────
+// ─── Step 2: Redeem token — returns credentials ──────────────
 router.get('/:id/credentials', authMiddleware, async (req, res) => {
   const { t: token } = req.query;
-
-  // Balance gate
-  const balance = await getUserBalance(req.user.id);
-  if (balance < REVEAL_FEE) {
-    return res.status(402).json({
-      success: false,
-      activation_required: true,
-      message: `You need a balance of $${REVEAL_FEE.toFixed(2)} to unlock credentials. Your current balance is $${balance.toFixed(2)}.`,
-      balance,
-      required: REVEAL_FEE,
-      remaining: parseFloat((REVEAL_FEE - balance).toFixed(2)),
-    });
-  }
 
   if (!token) {
     return res.status(401).json({
@@ -442,13 +417,7 @@ router.get('/:id/credentials', authMiddleware, async (req, res) => {
       await client.query('ROLLBACK');
       return res.status(403).json({ success: false, message: 'Token does not match this order.' });
     }
-    // Deduct the $350 reveal fee FIRST, then mark token consumed atomically
-    await client.query(
-      'UPDATE users SET balance = balance - $1 WHERE id = $2',
-      [REVEAL_FEE, req.user.id]
-    );
-
-    // Only mark token used AFTER successful deduction (prevents burned tokens)
+    // Mark token used
     await client.query(`UPDATE reveal_tokens SET used = TRUE WHERE token = $1`, [token]);
 
     // Fetch order credentials
@@ -487,7 +456,7 @@ router.get('/:id/credentials', authMiddleware, async (req, res) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     res.set('Pragma', 'no-cache');
 
-    return res.json({ success: true, data: encoded, fee_charged: REVEAL_FEE });
+    return res.json({ success: true, data: encoded, fee_charged: 0 });
   } catch (error) {
     await client.query('ROLLBACK');
     console.error('Get credentials error:', error);

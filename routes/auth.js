@@ -20,6 +20,31 @@ router.post('/register', async (req, res) => {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ success: false, message: 'Invalid email address.' });
     }
+
+    const emailDomain = email.split('@')[1]?.toLowerCase();
+    const disposableDomains = [
+      'yopmail.com', 'mailinator.com', 'tempmail.com', 'guerrillamail.com', 
+      'sharklasers.com', 'dispostable.com', 'getairmail.com', 'maildrop.cc', 
+      'temp-mail.org', 'throwawaymail.com', '10minutemail.com', 'crazymailing.com', 
+      'trashmail.com', 'generator.email'
+    ];
+    if (disposableDomains.includes(emailDomain)) {
+      return res.status(400).json({ success: false, message: 'Disposable or temporary emails are not allowed.' });
+    }
+
+    // Verify MX records to block completely fake domains
+    const dns = require('dns').promises;
+    try {
+      const mx = await dns.resolveMx(emailDomain);
+      if (!mx || mx.length === 0) {
+        return res.status(400).json({ success: false, message: 'This email domain has no valid mail servers (MX records).' });
+      }
+    } catch (dnsErr) {
+      if (dnsErr.code === 'ENOTFOUND' || dnsErr.code === 'ENODATA') {
+        return res.status(400).json({ success: false, message: 'Email domain does not exist or does not accept mail.' });
+      }
+    }
+
     if (username.length < 3 || username.length > 30) {
       return res.status(400).json({ success: false, message: 'Username must be 3-30 characters.' });
     }
@@ -129,18 +154,9 @@ const authMiddleware = require('../middleware/auth');
 
 router.get('/me', authMiddleware, async (req, res) => {
   try {
-    const [userResult, depositResult] = await Promise.all([
-      pool.query('SELECT id, username, email, balance, role, avatar, created_at FROM users WHERE id = $1', [req.user.id]),
-      pool.query(`SELECT COALESCE(SUM(amount), 0) AS total FROM deposits WHERE user_id = $1 AND status = 'approved'`, [req.user.id]),
-    ]);
+    const userResult = await pool.query('SELECT id, username, email, balance, role, avatar, created_at FROM users WHERE id = $1', [req.user.id]);
     const user = userResult.rows[0];
     user.balance = parseFloat(user.balance);
-    const totalDeposited = parseFloat(depositResult.rows[0].total);
-    const threshold = 350;
-    user.is_activated    = totalDeposited >= threshold;
-    user.total_deposited = totalDeposited;
-    user.activation_remaining = Math.max(0, threshold - totalDeposited);
-    user.activation_pct  = Math.min(100, Math.round((totalDeposited / threshold) * 100));
     return res.json({ success: true, user });
   } catch (error) {
     console.error('Get me error:', error);
@@ -239,7 +255,7 @@ router.post('/forgot-password', async (req, res) => {
       [token, user.id]
     );
 
-    const resetUrl = `${process.env.SITE_URL || 'https://www.lognest.store'}/reset-password.html?token=${token}`;
+    const resetUrl = `${process.env.SITE_URL || 'https://www.ondailylogs.store'}/reset-password.html?token=${token}`;
 
     // Try to send email if SMTP is configured
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
@@ -252,7 +268,7 @@ router.post('/forgot-password', async (req, res) => {
           auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
         });
         await transporter.sendMail({
-          from: `"LogNest" <${process.env.SMTP_USER}>`,
+          from: `"On A Daily Logs" <${process.env.SMTP_USER}>`,
           to: email,
           subject: 'Password Reset Request',
           html: `<p>Hi ${user.username},</p>

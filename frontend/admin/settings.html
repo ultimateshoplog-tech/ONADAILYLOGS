@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="../images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Settings — LogNest Admin</title>
+  <title>Settings — On A Daily Logs Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/admin.css" />
   <script src="../js/config.js"></script>
@@ -12,29 +12,9 @@
 </head>
 <body>
   <div class="a-shell">
-    <aside class="a-sidebar">
-      <div class="a-brand">
-        <img src="../images/logo.png" alt="LogNest" style="height:38px; width:auto; object-fit:contain;" /><span class="a-brand-tag" style="margin-left:0.4rem;">Admin</span>
-      </div>
-      <nav class="a-nav">
-        <span class="a-nav-label">Main</span>
-        <a href="/admin" class="a-nav-item"><span class="a-nav-icon">📊</span> Dashboard</a>
-        <span class="a-nav-label">Products</span>
-        <a href="/admin/add-product" class="a-nav-item"><span class="a-nav-icon">➕</span> Add Product</a>
-        <a href="/admin/existing-products" class="a-nav-item"><span class="a-nav-icon">📂</span> All Products</a>
-        <span class="a-nav-label">Management</span>
-        <a href="/admin/orders" class="a-nav-item"><span class="a-nav-icon">🛒</span> Orders</a>
-        
-        <a href="/admin/refunded-logs" class="a-nav-item"><span class="a-nav-icon">↩️</span> Refunded Logs</a>
-        <a href="/admin/users" class="a-nav-item"><span class="a-nav-icon">👥</span> Users</a>
-        <a href="/admin/deposits" class="a-nav-item"><span class="a-nav-icon">💰</span> Deposits</a>
-        <span class="a-nav-label">System</span>
-        <a href="/admin/settings" class="a-nav-item active"><span class="a-nav-icon">⚙️</span> Settings</a>
-      </nav>
-      <div class="a-sidebar-footer">
-        <a href="#" id="admin-logout" class="a-logout"><span>🚪</span> Sign Out</a>
-      </div>
-    </aside>
+    
+    <!-- Sidebar (Dynamically rendered by admin.js) -->
+    <aside class="a-sidebar"></aside>
 
     <main class="a-main">
       <header class="a-topbar">
@@ -48,11 +28,9 @@
       </header>
 
       <div class="a-content">
-
-
         <!-- Change Password -->
         <div class="a-card">
-          <h2 style="font-size:1rem; font-weight:700; margin-bottom: 1.25rem;">🔑 Change Admin Password</h2>
+          <h2 style="font-size:1rem; font-weight:700; margin-bottom: 1.25rem;">Change Admin Password</h2>
           <form id="change-password-form">
             <div class="a-form-grid">
               <div class="a-form-group">
@@ -72,9 +50,50 @@
           </form>
         </div>
 
-
+        <!-- Site Settings -->
+        <div class="a-card" style="margin-top: 1.5rem;">
+          <h2 style="font-size:1rem; font-weight:700; margin-bottom: 1.25rem;">General Platform Settings</h2>
+          <form id="site-settings-form">
+            <div class="a-form-grid">
+              <div class="a-form-group">
+                <label for="site_name">Site Name</label>
+                <input type="text" id="site_name" name="site_name" class="a-input" placeholder="e.g. On A Daily Logs" required />
+              </div>
+              <div class="a-form-group">
+                <label for="site_tagline">Site Tagline</label>
+                <input type="text" id="site_tagline" name="site_tagline" class="a-input" placeholder="e.g. Premium Digital Assets & Access Tools" required />
+              </div>
+              <div class="a-form-group">
+                <label for="min_deposit">Minimum Deposit (USD)</label>
+                <input type="number" id="min_deposit" name="min_deposit" step="0.01" min="0" class="a-input" placeholder="10.00" required />
+              </div>
+              <div class="a-form-group">
+                <label for="maintenance_mode">Maintenance Mode</label>
+                <select id="maintenance_mode" name="maintenance_mode" class="a-input" style="background:#fff; color:#1e1b4b;" required>
+                  <option value="false">Disabled (Site Live)</option>
+                  <option value="true">Enabled (Site Down)</option>
+                </select>
+              </div>
+            </div>
+            <div class="a-form-grid" style="margin-top: 1rem;">
+              <div class="a-form-group">
+                <label for="btc_wallet">Bitcoin Address</label>
+                <input type="text" id="btc_wallet" name="btc_wallet" class="a-input" placeholder="BTC Wallet Address" />
+              </div>
+              <div class="a-form-group">
+                <label for="usdt_wallet">USDT Address (TRC20)</label>
+                <input type="text" id="usdt_wallet" name="usdt_wallet" class="a-input" placeholder="USDT TRC20 Wallet Address" />
+              </div>
+            </div>
+            <div class="a-form-group" style="margin-top: 1rem;">
+              <label for="announcement">Announcement Banner Text</label>
+              <textarea id="announcement" name="announcement" class="a-textarea" placeholder="Keep empty to hide banner..." style="min-height: 80px;"></textarea>
+            </div>
+            <button type="submit" class="a-btn a-btn-primary" id="save-settings-btn" style="margin-top: 0.5rem;">Save Settings</button>
+          </form>
+        </div>
+      </div>
     </main>
   </div>
 </body>
 </html>
-

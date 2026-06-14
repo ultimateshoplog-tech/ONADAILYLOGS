@@ -2,6 +2,18 @@ const express = require('express');
 const pool = require('../db');
 const authMiddleware = require('../middleware/auth');
 const adminOnly = require('../middleware/adminOnly');
+const path = require('path');
+
+const uploadsBasePath = process.env.UPLOAD_PATH
+  ? path.resolve(process.env.UPLOAD_PATH)
+  : (process.env.VERCEL === '1'
+    ? '/tmp/uploads'
+    : path.join(__dirname, '../uploads'));
+
+const fs = require('fs');
+if (!fs.existsSync(uploadsBasePath)) {
+  fs.mkdirSync(uploadsBasePath, { recursive: true });
+}
 
 const router = express.Router();
 
@@ -176,19 +188,22 @@ router.put('/:id', authMiddleware, adminOnly, async (req, res) => {
     const result = await pool.query(
       `UPDATE products SET
         name = COALESCE($1, name),
-        category_id = COALESCE($2, category_id),
-        description = COALESCE($3, description),
-        short_description = COALESCE($4, short_description),
-        price = COALESCE($5, price),
-        stock = COALESCE($6, stock),
-        product_data = COALESCE($7, product_data),
-        image_url = COALESCE($8, image_url),
-        is_active = COALESCE($9, is_active),
-        featured = COALESCE($10, featured),
-        tags = COALESCE($11, tags)
-       WHERE id = $12
+        category_id = CASE WHEN $2 THEN $3 ELSE category_id END,
+        description = COALESCE($4, description),
+        short_description = COALESCE($5, short_description),
+        price = COALESCE($6, price),
+        stock = COALESCE($7, stock),
+        product_data = COALESCE($8, product_data),
+        image_url = COALESCE($9, image_url),
+        is_active = COALESCE($10, is_active),
+        featured = COALESCE($11, featured),
+        tags = COALESCE($12, tags)
+       WHERE id = $13
        RETURNING *`,
-      [updates.name, updates.category_id, updates.description, updates.short_description,
+      [updates.name,
+       category_id !== undefined,
+       (category_id === null || category_id === '') ? null : parseInt(category_id, 10),
+       updates.description, updates.short_description,
        updates.price, updates.stock, updates.product_data, updates.image_url,
        updates.is_active, updates.featured, updates.tags, req.params.id]
     );
@@ -280,6 +295,60 @@ router.get('/:id', async (req, res) => {
   } catch (error) {
     console.error('Get product error:', error);
     return res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// ─── Admin: Upload Cheque Images ──────────────────────────────────────────────
+const multer = require('multer');
+
+const uploadsDir = uploadsBasePath;
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    cb(null, 'cheque-' + uniqueSuffix + ext);
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|webp/i;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error('Only images (.jpg, .jpeg, .png, .webp) are allowed!'));
+  }
+});
+
+router.post('/upload-cheque', authMiddleware, adminOnly, upload.fields([
+  { name: 'front_image', maxCount: 1 },
+  { name: 'back_image', maxCount: 1 }
+]), (req, res) => {
+  try {
+    const files = req.files;
+    if (!files || !files.front_image || !files.back_image) {
+      return res.status(400).json({ success: false, message: 'Both front and back images are required.' });
+    }
+
+    const frontUrl = `/uploads/${files.front_image[0].filename}`;
+    const backUrl = `/uploads/${files.back_image[0].filename}`;
+
+    return res.json({
+      success: true,
+      front_image: frontUrl,
+      back_image: backUrl
+    });
+  } catch (error) {
+    console.error('Cheque upload error:', error);
+    return res.status(500).json({ success: false, message: 'Upload failed.' });
   }
 });
 

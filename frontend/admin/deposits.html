@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="../images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deposits — LogNest Admin</title>
+  <title>Deposits — On A Daily Logs Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/admin.css" />
   <script src="../js/config.js"></script>
@@ -50,28 +50,9 @@
 </head>
 <body>
   <div class="a-shell">
-    <aside class="a-sidebar">
-      <div class="a-brand">
-        <img src="../images/logo.png" alt="LogNest" style="height:38px;width:auto;object-fit:contain;" /><span class="a-brand-tag" style="margin-left:0.4rem;">Admin</span>
-      </div>
-      <nav class="a-nav">
-        <span class="a-nav-label">Main</span>
-        <a href="/admin" class="a-nav-item"><span class="a-nav-icon">📊</span> Dashboard</a>
-        <span class="a-nav-label">Products</span>
-        <a href="/admin/add-product" class="a-nav-item"><span class="a-nav-icon">➕</span> Add Product</a>
-        <a href="/admin/existing-products" class="a-nav-item"><span class="a-nav-icon">📂</span> All Products</a>
-        <span class="a-nav-label">Management</span>
-        <a href="/admin/orders" class="a-nav-item"><span class="a-nav-icon">🛒</span> Orders</a>
-        <a href="/admin/refunded-logs" class="a-nav-item"><span class="a-nav-icon">↩️</span> Refunded Logs</a>
-        <a href="/admin/users" class="a-nav-item"><span class="a-nav-icon">👥</span> Users</a>
-        <a href="/admin/deposits" class="a-nav-item active"><span class="a-nav-icon">💰</span> Deposits</a>
-        <span class="a-nav-label">System</span>
-        <a href="/admin/settings" class="a-nav-item"><span class="a-nav-icon">⚙️</span> Settings</a>
-      </nav>
-      <div class="a-sidebar-footer">
-        <a href="#" id="admin-logout" class="a-logout"><span>🚪</span> Sign Out</a>
-      </div>
-    </aside>
+
+    <!-- Sidebar (Dynamically rendered by admin.js) -->
+    <aside class="a-sidebar"></aside>
 
     <main class="a-main">
       <header class="a-topbar">
@@ -109,17 +90,17 @@
         <!-- Filters -->
         <div class="filter-tabs">
           <button class="ftab on" onclick="setFilter('')">All</button>
-          <button class="ftab" onclick="setFilter('pending')">⏳ Pending</button>
-          <button class="ftab" onclick="setFilter('approved')">✅ Approved</button>
-          <button class="ftab" onclick="setFilter('rejected')">❌ Rejected</button>
-          <button class="ftab" onclick="setFilter('oxapay')">⚡ Auto-Crypto</button>
+          <button class="ftab" onclick="setFilter('pending')">Pending</button>
+          <button class="ftab" onclick="setFilter('approved')">Approved</button>
+          <button class="ftab" onclick="setFilter('rejected')">Rejected</button>
+          <button class="ftab" onclick="setFilter('oxapay')">Auto-Crypto</button>
         </div>
 
         <!-- Table -->
         <div class="a-panel">
           <div class="a-panel-header">
             <h2 class="a-panel-title" id="table-title">All Deposits</h2>
-            <button class="a-btn a-btn-outline a-btn-sm" onclick="loadDeposits(currentPage)">↻ Refresh</button>
+            <button class="a-btn a-btn-outline a-btn-sm" onclick="loadDeposits(currentPage)">Refresh</button>
           </div>
           <table class="a-table" id="admin-deposits-table">
             <thead>
@@ -134,7 +115,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td colspan="7" class="a-empty">Loading deposits…</td></tr>
+              <tr><td colspan="7" class="a-empty">Loading deposits...</td></tr>
             </tbody>
           </table>
           <div class="a-pagination" id="deposits-pagination"></div>
@@ -143,43 +124,37 @@
     </main>
   </div>
 
-  <!-- ── Deposit Detail Modal ── -->
+  <!-- Deposit Detail Modal -->
   <div class="dep-modal-overlay" id="dep-modal-overlay" onclick="closeModal(event)">
     <div class="dep-modal">
-      <h3>💰 Deposit Details</h3>
+      <h3>Deposit Details</h3>
       <div id="dep-modal-body"></div>
       <div class="dep-modal-actions" id="dep-modal-actions"></div>
     </div>
   </div>
 
   <script>
-    const API_BASE = window.__API_BASE__ || window.API_BASE || 'http://localhost:5000/api';
-    const token    = localStorage.getItem('token');
-    const user     = JSON.parse(localStorage.getItem('user') || 'null');
-    if (!token || !user || user.role !== 'admin') window.location.href = '../login.html';
+    // Auth is handled by admin.js
 
     let currentPage = 1, currentFilter = '', allDeposits = [];
     const PAGE = 20;
 
-    /* ── Filter tabs ── */
     function setFilter(f) {
       currentFilter = f;
       currentPage   = 1;
       document.querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
       event.target.classList.add('on');
-      const labels = { '':'All Deposits', pending:'Pending Deposits', approved:'Approved Deposits', rejected:'Rejected Deposits', oxapay:'Auto-Crypto Deposits' };
+      const labels = { '': 'All Deposits', pending: 'Pending Deposits', approved: 'Approved Deposits', rejected: 'Rejected Deposits', oxapay: 'Auto-Crypto Deposits' };
       document.getElementById('table-title').textContent = labels[f] || 'All Deposits';
       loadDeposits(1);
     }
 
-    /* ── Load deposits ── */
     async function loadDeposits(page = 1) {
       currentPage = page;
       const tbody = document.querySelector('#admin-deposits-table tbody');
-      tbody.innerHTML = '<tr><td colspan="7" class="a-empty">Loading…</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="a-empty">Loading...</td></tr>';
 
       try {
-        // Build query: for oxapay filter, use method param
         let url = `${API_BASE}/deposits/admin/all?page=${page}&limit=${PAGE}`;
         if (currentFilter === 'oxapay') url += '&method=oxapay';
         else if (currentFilter) url += `&status=${currentFilter}`;
@@ -213,17 +188,17 @@
 
     function methodBadge(m) {
       const map = {
-        oxapay:  ['⚡','oxapay','Auto-Crypto'],
-        manual:  ['📋','manual','Manual'],
-        bitcoin: ['₿','bitcoin','Bitcoin'],
-        usdt:    ['₮','usdt','USDT'],
+        oxapay:  ['', 'oxapay', 'Auto-Crypto'],
+        manual:  ['', 'manual', 'Manual'],
+        bitcoin: ['', 'bitcoin', 'Bitcoin'],
+        usdt:    ['', 'usdt', 'USDT'],
       };
-      const [icon, cls, label] = map[m] || ['?','manual', m];
-      return `<span class="method-badge ${cls}">${icon} ${label}</span>`;
+      const [icon, cls, label] = map[m] || ['', 'manual', m];
+      return `<span class="method-badge ${cls}">${label}</span>`;
     }
 
     function statusBadge(s) {
-      const map = { pending:'a-badge-yellow', approved:'a-badge-green', rejected:'a-badge-red' };
+      const map = { pending: 'a-badge-yellow', approved: 'a-badge-green', rejected: 'a-badge-red' };
       return `<span class="a-badge ${map[s]||''}">${s}</span>`;
     }
 
@@ -242,25 +217,25 @@
           <td>
             <button class="a-btn a-btn-outline a-btn-sm" onclick="openModal('${d.id}')">View</button>
             ${d.status === 'pending' ? `
-              <button class="a-btn a-btn-primary a-btn-sm" style="margin-left:.3rem;" onclick="approveDeposit('${d.id}')">✓ Approve</button>
-              <button class="a-btn a-btn-outline a-btn-sm" style="margin-left:.3rem;border-color:#ef4444;color:#ef4444;" onclick="rejectDeposit('${d.id}')">✕</button>
+              <button class="a-btn a-btn-primary a-btn-sm" style="margin-left:.3rem;" onclick="approveDeposit('${d.id}')">Approve</button>
+              <button class="a-btn a-btn-outline a-btn-sm" style="margin-left:.3rem;border-color:#ef4444;color:#ef4444;" onclick="rejectDeposit('${d.id}')">Reject</button>
             ` : ''}
           </td>
         </tr>`;
       }).join('');
+      if (window.makeTablesResponsive) window.makeTablesResponsive();
     }
 
     function renderPagination(total, page) {
       const pages = Math.ceil(total / PAGE);
       const pg = document.getElementById('deposits-pagination');
       pg.innerHTML = pages > 1 ? `
-        <button class="a-btn a-btn-outline a-btn-sm" onclick="loadDeposits(${page-1})" ${page<=1?'disabled':''}>← Prev</button>
+        <button class="a-btn a-btn-outline a-btn-sm" onclick="loadDeposits(${page-1})" ${page<=1?'disabled':''}>Prev</button>
         <span style="font-size:.82rem;color:#6b7280;padding:0 .5rem;">Page ${page} / ${pages}</span>
-        <button class="a-btn a-btn-outline a-btn-sm" onclick="loadDeposits(${page+1})" ${page>=pages?'disabled':''}>Next →</button>
+        <button class="a-btn a-btn-outline a-btn-sm" onclick="loadDeposits(${page+1})" ${page>=pages?'disabled':''}>Next</button>
       ` : '';
     }
 
-    /* ── Modal ── */
     function openModal(id) {
       const d = allDeposits.find(x => x.id === id);
       if (!d) return;
@@ -279,8 +254,8 @@
       `;
       const actions = document.getElementById('dep-modal-actions');
       actions.innerHTML = d.status === 'pending' ? `
-        <button class="a-btn a-btn-primary" onclick="approveDeposit('${d.id}');closeModal()">✓ Approve & Credit</button>
-        <button class="a-btn a-btn-outline" style="border-color:#ef4444;color:#ef4444;" onclick="rejectDeposit('${d.id}');closeModal()">✕ Reject</button>
+        <button class="a-btn a-btn-primary" onclick="approveDeposit('${d.id}');closeModal()">Approve & Credit</button>
+        <button class="a-btn a-btn-outline" style="border-color:#ef4444;color:#ef4444;" onclick="rejectDeposit('${d.id}');closeModal()">Reject</button>
         <button class="a-btn a-btn-outline" onclick="closeModal()">Cancel</button>
       ` : `<button class="a-btn a-btn-outline" onclick="closeModal()">Close</button>`;
       document.getElementById('dep-modal-overlay').classList.add('open');
@@ -292,9 +267,8 @@
       }
     }
 
-    /* ── Approve / Reject ── */
     async function approveDeposit(id) {
-      const ok = await adminConfirm('Approve Deposit', 'Approve this deposit and credit the user?', '✓ Approve & Credit');
+      const ok = await adminConfirm('Approve Deposit', 'Approve this deposit and credit the user?', 'Approve & Credit');
       if (!ok) return;
       try {
         const res  = await fetch(`${API_BASE}/deposits/admin/approve/${id}`, { method:'POST', headers:{Authorization:`Bearer ${token}`} });
@@ -322,7 +296,9 @@
       } catch { adminToast('Connection error.','error'); }
     }
 
-    loadDeposits();
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDeposits();
+    });
   </script>
 </body>
 </html>

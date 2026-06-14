@@ -1,138 +1,101 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Cart – LogNest</title>
+  <title>Cart — On A Daily Logs</title>
   <meta name="description" content="Review your selected bank logs before checkout." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script src="js/config.js"></script>
   <script src="js/nav.js"></script>
   <style>
-    .cart-page { display: grid; grid-template-columns: 1fr 320px; gap: 1.5rem; align-items: start; }
+    .cart-page { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
 
     /* ── Cart Items ── */
-    .cart-items-panel { display: flex; flex-direction: column; gap: 0.75rem; }
+    .cart-items-panel { display: flex; flex-direction: column; gap: 1rem; }
 
     .cart-item {
       display: grid;
       grid-template-columns: 44px 1fr auto auto;
       align-items: center;
-      gap: 1rem;
-      padding: 1rem 1.25rem;
+      gap: 1.25rem;
+      padding: 1.25rem;
       background: var(--bg-card);
       border: 1px solid var(--border-soft);
-      border-radius: 12px;
-      transition: box-shadow 0.2s, border-color 0.2s;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-smooth);
     }
-    .cart-item:hover { box-shadow: 0 4px 16px rgba(44,36,22,0.07); border-color: var(--primary); }
+    .cart-item:hover { box-shadow: var(--shadow-md); border-color: var(--primary); }
 
     .cart-icon {
-      width: 44px; height: 44px; border-radius: 10px;
+      width: 44px; height: 44px; border-radius: var(--radius-sm);
       background: var(--bg-accent); border: 1px solid var(--border-soft);
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem; font-weight: 800; color: var(--primary-deep);
+      font-size: 1.1rem; font-weight: 800; color: var(--primary);
       flex-shrink: 0;
     }
 
     .cart-item-body { overflow: hidden; }
-    .cart-item-bank { font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--accent-terra); letter-spacing: 0.05em; margin-bottom: 0.15rem; }
-    .cart-item-name { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
+    .cart-item-bank { font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--primary); letter-spacing: 0.05em; margin-bottom: 0.15rem; }
+    .cart-item-name { font-size: 0.95rem; font-weight: 700; color: var(--primary-deep); margin-bottom: 0.25rem; }
     .cart-item-info {
-      font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;
-      margin-bottom: 0.35rem;
+      font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;
+      margin-bottom: 0.5rem;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
     .cart-item-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .cart-tag {
       font-size: 0.75rem; padding: 0.2rem 0.6rem;
-      border-radius: 6px; border: 1px solid var(--border-soft);
+      border-radius: var(--radius-pill); border: 1px solid var(--border-soft);
       background: var(--bg-main); color: var(--text-main); font-weight: 600;
     }
 
-    .cart-item-price { font-size: 1.1rem; font-weight: 800; color: var(--success); white-space: nowrap; }
+    .cart-item-price { font-size: 1.05rem; font-weight: 700; color: var(--primary-deep); white-space: nowrap; }
 
     .remove-btn {
-      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
-      background: none; border: 1px solid transparent; border-radius: 8px;
-      cursor: pointer; color: var(--primary); font-size: 1rem;
-      transition: all 0.2s;
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      background: none; border: 1px solid transparent; border-radius: var(--radius-sm);
+      cursor: pointer; color: var(--text-muted); font-size: 1rem;
+      transition: all var(--transition-smooth);
     }
-    .remove-btn:hover { color: #b91c1c; background: #fef2f2; border-color: #fecaca; }
+    .remove-btn:hover { color: #EF4444; background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.1); }
 
     /* ── Summary Panel ── */
     .summary-panel {
       background: var(--bg-card);
       border: 1px solid var(--border-soft);
-      border-radius: 14px;
-      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
       position: sticky;
-      top: 70px;
+      top: 90px;
+      box-shadow: var(--shadow-sm);
     }
-    .summary-title { font-size: 1rem; font-weight: 700; color: var(--primary-deep); margin-bottom: 1.25rem; }
-    .summary-line { display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; margin-bottom: 0.65rem; color: var(--text-muted); }
-    .summary-line strong { color: var(--text-main); }
-    .summary-divider { height: 1px; background: var(--border-soft); margin: 0.75rem 0; }
-    .summary-total { display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; font-weight: 800; color: var(--text-main); }
+    .summary-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-deep); margin-bottom: 1.25rem; }
+    .summary-line { display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; margin-bottom: 0.75rem; color: var(--text-muted); }
+    .summary-line strong { color: var(--primary-deep); }
+    .summary-divider { height: 1px; background: var(--border-soft); margin: 1rem 0; }
+    .summary-total { display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 800; color: var(--primary-deep); }
 
     .balance-box {
       background: var(--bg-main); border: 1px solid var(--border-soft);
-      border-radius: 10px; padding: 0.85rem 1rem; margin: 1rem 0;
+      border-radius: var(--radius-md); padding: 1rem; margin: 1.25rem 0;
     }
-    .balance-row { display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.4rem; }
+    .balance-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.5rem; }
     .balance-row:last-child { margin-bottom: 0; }
 
     .empty-cart {
       grid-column: 1 / -1;
       text-align: center;
-      padding: 4rem 2rem;
-      border: 1px dashed var(--border-soft); border-radius: 16px;
+      padding: 5rem 2rem;
+      border: 1px dashed var(--border-soft); border-radius: var(--radius-lg);
       background: var(--bg-card);
     }
 
-    @media (max-width: 768px) {
-      .cart-page { grid-template-columns: 1fr; gap: 0.75rem; }
-
-      /* Summary */
-      .summary-panel {
-        position: relative; top: 0;
-        padding: 0.85rem;
-        border-radius: 10px;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-      .summary-title { font-size: 0.85rem; margin-bottom: 0.6rem; }
-      .summary-line { font-size: 0.8rem; margin-bottom: 0.4rem; }
-      .summary-divider { margin: 0.5rem 0; }
-      .summary-total { font-size: 0.95rem; }
-      .balance-box { padding: 0.6rem 0.7rem; margin: 0.6rem 0; border-radius: 8px; }
-      .balance-row { font-size: 0.78rem; margin-bottom: 0.3rem; }
-      #checkout-btn { padding: 0.65rem !important; font-size: 0.85rem !important; }
-
-      /* Cart Items */
-      .cart-items-panel { gap: 0.5rem; }
-      .cart-item {
-        display: grid;
-        grid-template-columns: 32px 1fr auto;
-        grid-template-rows: auto auto;
-        gap: 0.35rem 0.5rem;
-        padding: 0.7rem;
-        border-radius: 10px;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-      .cart-icon { width: 32px; height: 32px; font-size: 0.85rem; border-radius: 6px; grid-row: 1; }
-      .cart-item-body { grid-column: 2 / -1; grid-row: 1; min-width: 0; }
-      .cart-item-bank { font-size: 0.68rem; margin-bottom: 0.1rem; }
-      .cart-item-name { font-size: 0.85rem; margin-bottom: 0.15rem; }
-      .cart-item-info { font-size: 0.74rem; -webkit-line-clamp: 2; margin-bottom: 0.25rem; }
-      .cart-item-tags { gap: 0.3rem; }
-      .cart-tag { font-size: 0.7rem; padding: 0.15rem 0.45rem; }
-      .cart-item-price { grid-column: 1 / 3; grid-row: 2; font-size: 0.9rem; }
-      .remove-btn { grid-column: 3; grid-row: 2; width: 26px; height: 26px; font-size: 0.8rem; justify-self: end; }
-      .empty-cart { padding: 2rem 1rem; }
+    @media (max-width: 850px) {
+      .cart-page { grid-template-columns: 1fr; gap: 1.5rem; }
+      .summary-panel { position: relative; top: 0; }
     }
   </style>
 </head>
@@ -140,18 +103,18 @@
   <header class="header">
     <div class="container nav-container">
       <a href="index.html" class="logo">
-        <img src="images/logo.png" alt="LogNest" class="nav-logo" onerror="this.style.display='none'" />
+        <img src="images/logo.jpg" class="logo-img" alt="Logo">
+        <span>On A Daily Logs</span>
       </a>
       <nav><ul class="nav-list" id="main-nav"></ul></nav>
     </div>
   </header>
 
-  <main class="main-content container" style="padding-top: 1.25rem;">
-
+  <main class="main-content container">
     <!-- Page title -->
-    <div style="margin-bottom:1.25rem;">
-      <h1 style="font-size:1.5rem; color:var(--primary-deep); margin-bottom:0.15rem;">🛒 Your Cart</h1>
-      <p style="color:var(--text-muted); font-size:0.85rem;">Review your selected logs before confirming purchase.</p>
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size: 1.75rem; color: var(--primary-deep); margin-bottom: 0.25rem;">Shopping Cart</h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Review your selected items before checking out.</p>
     </div>
 
     <div class="cart-page">
@@ -162,7 +125,7 @@
 
       <!-- Right: Summary -->
       <aside class="summary-panel" id="order-summary" style="display:none;">
-        <div class="summary-title">Order Summary</div>
+        <div class="summary-title">Summary</div>
 
         <div class="summary-line">
           <span>Items</span>
@@ -181,7 +144,7 @@
 
         <div class="balance-box">
           <div class="balance-row">
-            <span style="color:var(--text-muted);">Your Balance</span>
+            <span style="color:var(--text-muted);">Account Balance</span>
             <span id="user-balance" style="font-weight:700; color:var(--primary-deep);">$0.00</span>
           </div>
           <div class="balance-row">
@@ -191,7 +154,7 @@
         </div>
 
         <button id="checkout-btn" class="btn btn-primary" style="width:100%; padding:0.85rem; font-size:0.95rem;">
-          ✅ Confirm &amp; Checkout
+          Confirm &amp; Checkout
         </button>
       </aside>
     </div>
@@ -199,7 +162,7 @@
 
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2026 LogNest. All rights reserved.</p> 
+      <p>&copy; 2026 On A Daily Logs. All rights reserved.</p> 
     </div>
   </footer>
 

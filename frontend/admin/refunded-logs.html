@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="../images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Refunded Logs – LogNest Admin</title>
+  <title>Refunded Logs – On A Daily Logs Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/admin.css" />
   <script src="../js/config.js"></script>
@@ -12,28 +12,9 @@
 </head>
 <body>
   <div class="a-shell">
-    <aside class="a-sidebar">
-      <div class="a-brand">
-        <img src="../images/logo.png" alt="LogNest" style="height:38px; width:auto; object-fit:contain;" /><span class="a-brand-tag" style="margin-left:0.4rem;">Admin</span>
-      </div>
-      <nav class="a-nav">
-        <span class="a-nav-label">Main</span>
-        <a href="/admin" class="a-nav-item"><span class="a-nav-icon">📊</span> Dashboard</a>
-        <span class="a-nav-label">Products</span>
-        <a href="/admin/add-product" class="a-nav-item"><span class="a-nav-icon">➕</span> Add Product</a>
-        <a href="/admin/existing-products" class="a-nav-item"><span class="a-nav-icon">📂</span> All Products</a>
-        <span class="a-nav-label">Management</span>
-        <a href="/admin/orders" class="a-nav-item"><span class="a-nav-icon">🛒</span> Orders</a>
-        <a href="/admin/refunded-logs" class="a-nav-item active"><span class="a-nav-icon">↩️</span> Refunded Logs</a>
-        <a href="/admin/users" class="a-nav-item"><span class="a-nav-icon">👥</span> Users</a>
-        <a href="/admin/deposits" class="a-nav-item"><span class="a-nav-icon">💰</span> Deposits</a>
-        <span class="a-nav-label">System</span>
-        <a href="/admin/settings" class="a-nav-item"><span class="a-nav-icon">⚙️</span> Settings</a>
-      </nav>
-      <div class="a-sidebar-footer">
-        <a href="#" id="admin-logout" class="a-logout"><span>🚪</span> Sign Out</a>
-      </div>
-    </aside>
+
+    <!-- Sidebar (Dynamically rendered by admin.js) -->
+    <aside class="a-sidebar"></aside>
 
     <main class="a-main">
       <header class="a-topbar">
@@ -89,10 +70,7 @@
   </div>
 
   <script>
-    const API_BASE = window.__API_BASE__ || window.API_BASE || 'http://localhost:5000/api';
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user') || 'null');
-    if (!token || !user || user.role !== 'admin') window.location.href = '../login.html';
+    // Auth is handled by admin.js
 
     let allLogs = [];
     const PAGE_SIZE = 10;
@@ -150,10 +128,11 @@
         const pages = Math.ceil(total / PAGE_SIZE);
         const pg = document.getElementById('refunded-pagination');
         pg.innerHTML = pages > 1 ? `
-          <button class="a-btn a-btn-outline a-btn-sm" onclick="loadRefundedLogs(${page - 1})" ${page <= 1 ? 'disabled' : ''}>← Prev</button>
+          <button class="a-btn a-btn-outline a-btn-sm" onclick="loadRefundedLogs(${page - 1})" ${page <= 1 ? 'disabled' : ''}>Prev</button>
           <span style="font-size:.82rem;color:#6b7280;padding:0 0.5rem;">Page ${page} / ${pages}</span>
-          <button class="a-btn a-btn-outline a-btn-sm" onclick="loadRefundedLogs(${page + 1})" ${page >= pages ? 'disabled' : ''}>Next →</button>
+          <button class="a-btn a-btn-outline a-btn-sm" onclick="loadRefundedLogs(${page + 1})" ${page >= pages ? 'disabled' : ''}>Next</button>
         ` : '';
+        if (window.makeTablesResponsive) window.makeTablesResponsive();
       } catch (err) {
         console.error(err);
         tbody.innerHTML = '<tr><td colspan="6" class="a-empty">Server error loading logs.</td></tr>';
@@ -183,21 +162,20 @@
         <div style="background:#0d1117;border-radius:16px;padding:1.75rem;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;border:1px solid #2a4a3a;box-shadow:0 24px 60px rgba(0,0,0,0.5);">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
             <div>
-              <h2 style="font-size:1rem;font-weight:700;color:#58d68d;">↩ Recovered Log</h2>
+              <h2 style="font-size:1rem;font-weight:700;color:#58d68d;">Recovered Log</h2>
               <p style="font-size:.78rem;color:#6b7280;margin-top:0.2rem;">${safeProduct || 'N/A'} — refunded $${amount} from <strong style="color:#9ca3af;">${safeUser}</strong></p>
             </div>
             <button id="modal-close-btn" style="background:rgba(255,255,255,0.08);border:none;color:#9ca3af;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">✕</button>
           </div>
           <pre style="color:#58d68d;font-family:'Courier New',monospace;font-size:.82rem;line-height:1.7;white-space:pre-wrap;word-break:break-word;background:transparent;">${safeCreds}</pre>
           <div style="display:flex;justify-content:flex-end;gap:0.75rem;margin-top:1.25rem;">
-            <button id="modal-copy-btn" style="padding:0.5rem 1rem;border-radius:8px;border:1px solid #2a4a3a;background:rgba(88,214,141,0.1);color:#58d68d;font-size:.82rem;font-weight:600;cursor:pointer;">📋 Copy All</button>
+            <button id="modal-copy-btn" style="padding:0.5rem 1rem;border-radius:8px;border:1px solid #2a4a3a;background:rgba(88,214,141,0.1);color:#58d68d;font-size:.82rem;font-weight:600;cursor:pointer;">Copy All</button>
             <button id="modal-cancel-btn" style="padding:0.5rem 1rem;border-radius:8px;border:1px solid #374151;background:transparent;color:#9ca3af;font-size:.82rem;font-weight:600;cursor:pointer;">Close</button>
           </div>
         </div>
       `;
       document.body.appendChild(overlay);
 
-      // Attach events safely (no inline JS with raw data)
       overlay.querySelector('#modal-close-btn').onclick  = () => overlay.remove();
       overlay.querySelector('#modal-cancel-btn').onclick = () => overlay.remove();
       overlay.querySelector('#modal-copy-btn').onclick   = () => {
@@ -206,7 +184,9 @@
       overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
     }
 
-    loadRefundedLogs();
+    document.addEventListener('DOMContentLoaded', () => {
+      loadRefundedLogs();
+    });
   </script>
 </body>
 </html>

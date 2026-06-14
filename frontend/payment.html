@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Complete Payment – LogNest</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <title>Complete Payment – On A Daily Logs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script src="js/toast.js"></script>
   <script src="js/config.js"></script>
@@ -106,9 +106,9 @@
     @media(max-width:480px){ .amount-section { padding: 0 1rem 1rem; } }
     .amount-pill {
       display: flex; align-items: center; justify-content: space-between;
-      background: linear-gradient(135deg, var(--primary-deep) 0%, #0a6e6e 100%);
+      background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary) 100%);
       border-radius: var(--radius-md); padding: 0.85rem 1.15rem;
-      color: #fff; box-shadow: 0 4px 14px rgba(13,79,79,0.25);
+      color: #fff; box-shadow: 0 4px 14px rgba(90, 49, 244, 0.25);
     }
     .amount-pill .left { display: flex; flex-direction: column; gap: 0.1rem; }
     .amount-pill .lbl { font-size: 0.65rem; opacity: 0.75; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
@@ -146,10 +146,10 @@
     .step-row { display: flex; gap: 0.6rem; align-items: flex-start; }
     .s-num {
       width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; margin-top: 2px;
-      background: linear-gradient(135deg, var(--primary-deep), #0a6e6e);
+      background: linear-gradient(135deg, var(--primary-deep), var(--primary));
       color: #fff; font-size: 0.65rem; font-weight: 800;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 6px rgba(13,79,79,0.3);
+      box-shadow: 0 2px 6px rgba(90, 49, 244, 0.3);
     }
     .s-text { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
     .s-text strong { color: var(--text-main); }
@@ -203,7 +203,10 @@
 <body data-require-auth="true">
   <header class="header">
     <div class="container nav-container">
-      <a href="index.html" class="logo"><img src="images/logo.png" alt="Logo" class="nav-logo" onerror="this.style.display='none'" /></a>
+      <a href="index.html" class="logo">
+        <img src="images/logo.jpg" class="logo-img" alt="Logo">
+        <span>On A Daily Logs</span>
+      </a>
       <nav><ul class="nav-list" id="main-nav"></ul></nav>
     </div>
   </header>
@@ -279,7 +282,7 @@
             </div>
             <div class="step-row">
               <div class="s-num">4</div>
-              <div class="s-text"><strong>Done!</strong> Your LogNest balance updates automatically — no further action needed.</div>
+              <div class="s-text"><strong>Done!</strong> Your On A Daily Logs balance updates automatically — no further action needed.</div>
             </div>
           </div>
         </div>
@@ -305,7 +308,7 @@
   </div>
 
   <footer class="footer">
-    <div class="container"><p>&copy; 2026 LogNest. All rights reserved.</p> </div>
+    <div class="container"><p>&copy; 2026 On A Daily Logs. All rights reserved.</p> </div>
   </footer>
 
   <script>

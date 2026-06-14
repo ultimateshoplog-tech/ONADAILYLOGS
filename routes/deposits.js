@@ -3,6 +3,12 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
+
+const uploadsBasePath = process.env.UPLOAD_PATH
+  ? path.resolve(process.env.UPLOAD_PATH)
+  : (process.env.VERCEL === '1'
+    ? '/tmp/uploads'
+    : path.join(__dirname, '..', 'uploads'));
 const crypto = require('crypto');
 const pool = require('../db');
 const authMiddleware = require('../middleware/auth');
@@ -43,10 +49,7 @@ function nowpaymentsRequest(method, endpoint, body) {
 const router = express.Router();
 
 // ─── Multer Setup (Proof of Payment Uploads) ──────────────────────────────────
-// Vercel serverless only allows writes to /tmp
-const uploadDir = process.env.VERCEL === '1'
-  ? '/tmp/uploads/proofs'
-  : path.join(__dirname, '..', 'uploads', 'proofs');
+const uploadDir = path.join(uploadsBasePath, 'proofs');
 
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
@@ -364,7 +367,7 @@ router.post('/nowpayments/create', authMiddleware, async (req, res) => {
       price_amount: parseFloat(amount),
       price_currency: currency,
       order_id: `deposit_${depositId}`,
-      order_description: `LogNest Balance Top-Up – $${parseFloat(amount).toFixed(2)}`,
+      order_description: `On A Daily Logs Balance Top-Up – $${parseFloat(amount).toFixed(2)}`,
       ipn_callback_url: process.env.NOWPAYMENTS_CALLBACK_URL,
       success_url: process.env.NOWPAYMENTS_SUCCESS_URL,
       cancel_url: process.env.NOWPAYMENTS_CANCEL_URL,
@@ -564,7 +567,7 @@ router.post('/oxapay/whitelabel', authMiddleware, async (req, res) => {
       pay_currency,
       lifetime:     30,
       order_id:     `deposit_${depositId}`,
-      description:  `LogNest Top-Up $${parseFloat(amount).toFixed(2)}`,
+      description:  `On A Daily Logs Top-Up $${parseFloat(amount).toFixed(2)}`,
       callback_url: process.env.OXAPAY_CALLBACK_URL,
       return_url:   process.env.OXAPAY_RETURN_URL,
     };
@@ -636,7 +639,7 @@ router.post('/oxapay/create', authMiddleware, async (req, res) => {
       currency: 'USD',
       lifetime: 60,
       order_id: `deposit_${depositId}`,
-      description: `LogNest Balance Top-Up – $${parseFloat(amount).toFixed(2)}`,
+      description: `On A Daily Logs Balance Top-Up – $${parseFloat(amount).toFixed(2)}`,
       callback_url: process.env.OXAPAY_CALLBACK_URL,
       return_url: process.env.OXAPAY_RETURN_URL,
     });

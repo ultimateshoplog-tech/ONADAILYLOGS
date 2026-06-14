@@ -25,7 +25,7 @@ function fix(relPath, patches) {
 // ─── deposit.html ─────────────────────────────────────────────────────────────
 fix('deposit.html', [
   // Title encoding
-  ['Top Up Balance \u00e2\u20ac\u201c LogNest', 'Top Up Balance \u2013 LogNest'],
+  ['Top Up Balance \u00e2\u20ac\u201c On A Daily Logs', 'Top Up Balance \u2013 On A Daily Logs'],
   // Loading text
   ['Loading\u00e2\u20ac\u00a6', 'Loading\u2026'],
   // Address not configured em-dash
@@ -40,7 +40,7 @@ fix('deposit.html', [
 
 // ─── order-detail.html ────────────────────────────────────────────────────────
 fix('order-detail.html', [
-  ['Order Details \u00e2\u20ac\u201c LogNest', 'Order Details \u2013 LogNest'],
+  ['Order Details \u00e2\u20ac\u201c On A Daily Logs', 'Order Details \u2013 On A Daily Logs'],
   ["const API_BASE = 'http://localhost:5000/api';", "const API_BASE = window.API_BASE || 'http://localhost:5000/api';"],
 ]);
 

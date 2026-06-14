@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add Funds – LogNest</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <title>Add Funds – On A Daily Logs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script src="js/toast.js"></script>
   <script src="js/config.js"></script>
@@ -38,10 +38,10 @@
     .how-step-row { display: flex; gap: 1.25rem; align-items: flex-start; }
     .step-num {
       width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--primary-deep), #0a6e6e);
+      background: linear-gradient(135deg, var(--primary-deep), var(--primary));
       color: #fff; font-size: 1rem; font-weight: 800;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 6px 16px rgba(13,79,79,0.25);
+      box-shadow: 0 6px 16px rgba(90, 49, 244, 0.25);
     }
     .step-text { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; margin-top: 0.2rem; text-align: left; }
     .step-text strong { color: var(--text-main); font-size: 1.05rem; display: block; margin-bottom: 0.3rem; }
@@ -85,37 +85,80 @@
     }
     .custom-input-wrap input:focus {
       outline: none; border-color: var(--primary-deep);
-      box-shadow: 0 0 0 3px rgba(13,79,79,0.12);
+      box-shadow: 0 0 0 3px rgba(90, 49, 244, 0.12);
     }
 
-    /* ── Coin ── */
-    .coin-btn {
-      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
-      padding: 1.2rem; border: 2px solid var(--primary-deep);
-      border-radius: var(--radius-md); background: var(--bg-accent);
-      cursor: default; width: 100%; box-shadow: 0 0 0 3px rgba(13,79,79,0.12);
-      box-sizing: border-box;
+    /* ── Coin Grid ── */
+    .coin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
     }
-    .coin-btn .ci { display: flex; align-items: center; }
-    .coin-btn .ci svg { width: 32px; height: 32px; }
-    .coin-btn .cn { font-size: 1.1rem; font-weight: 800; color: var(--text-main); }
-    .coin-btn .net {
-      font-size: 0.75rem; font-weight: 700;
-      color: var(--text-muted); background: var(--bg-card);
-      border: 1px solid var(--border-soft); border-radius: 6px;
-      padding: 0.2rem 0.6rem; margin-left: auto;
+    .coin-opt {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      user-select: none;
+    }
+    .coin-opt:hover {
+      border-color: var(--primary);
+      background: var(--bg-accent);
+      transform: translateY(-1px);
+    }
+    .coin-opt.active {
+      border-color: var(--primary);
+      background: var(--bg-accent);
+      box-shadow: 0 0 0 3px rgba(90, 49, 244, 0.12);
+    }
+    .coin-opt-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .coin-opt-icon.btc  { background: #F7931A; }
+    .coin-opt-icon.ltc  { background: #345D9D; }
+    .coin-opt-icon.usdt { background: #26A17B; }
+    .coin-opt-icon.eth  { background: #627EEA; }
+
+    .coin-opt-details {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .coin-opt-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .coin-opt-net {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
     }
 
     /* ── Generate button ── */
     .af-footer { padding: 1.5rem 2rem; background: var(--bg-main); }
     .gen-btn {
       width: 100%; padding: 1.1rem;
-      background: linear-gradient(135deg, var(--primary-deep) 0%, #0a6e6e 100%);
+      background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary) 100%);
       color: #fff; border: none; border-radius: var(--radius-md);
       font-size: 1.05rem; font-weight: 800; cursor: pointer; letter-spacing: .02em;
       transition: all 0.2s;
       display: flex; align-items: center; justify-content: center; gap: 0.6rem;
-      box-shadow: 0 6px 20px rgba(13,79,79,0.3);
+      box-shadow: 0 6px 20px rgba(90, 49, 244, 0.3);
       position: relative; overflow: hidden;
       box-sizing: border-box;
     }
@@ -123,7 +166,7 @@
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
     }
-    .gen-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(13,79,79,0.4); }
+    .gen-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(90, 49, 244, 0.4); }
     .gen-btn:active { transform: translateY(0); }
     .gen-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
 
@@ -155,7 +198,10 @@
 <body data-require-auth="true">
   <header class="header">
     <div class="container nav-container">
-      <a href="index.html" class="logo"><img src="images/logo.png" alt="Logo" class="nav-logo" onerror="this.style.display='none'" /></a>
+      <a href="index.html" class="logo">
+        <img src="images/logo.jpg" class="logo-img" alt="Logo">
+        <span>On A Daily Logs</span>
+      </a>
       <nav><ul class="nav-list" id="main-nav"></ul></nav>
     </div>
   </header>
@@ -195,22 +241,42 @@
               <div class="af-section-label">Amount (USD)</div>
               <div class="custom-input-wrap">
                 <span class="sym">$</span>
-                <input type="number" id="dep-amount" min="5" step="1" placeholder="Enter amount…" />
+                <input type="number" id="dep-amount" min="5" step="1" value="5" placeholder="Enter amount…" />
               </div>
             </div>
 
-            <!-- Coin -->
+            <!-- Cryptocurrency Selection Grid -->
             <div class="af-section">
               <div class="af-section-label">Cryptocurrency</div>
-              <div class="coin-btn on">
-                <span class="ci">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="12" fill="#F7931A"/>
-                    <path d="M16.6 10.95C16.8 9.53 15.68 8.87 14.18 8.35L14.68 6.35L13.43 6.04L12.95 7.96C12.63 7.88 12.3 7.8 11.97 7.72L12.46 5.8L11.22 5.49L10.72 7.48C10.42 7.41 10.13 7.34 9.85 7.27L9.85 7.27L8.43 6.92L8.15 8.04C8.15 8.04 8.92 8.21 8.89 8.23C9.3 8.34 9.38 8.6 9.4 8.78L8.98 10.46C9.02 10.47 9.06 10.48 9.1 10.5L8.93 11.19L8.35 13.52C8.3 13.62 8.16 13.88 7.78 13.78C7.81 13.81 7.03 13.62 7.03 13.62L6.5 14.88L7.86 15.22C8.18 15.3 8.49 15.39 8.8 15.47L8.3 17.5L9.54 17.81L10.03 15.84C10.37 15.93 10.69 16 11.01 16.08L10.51 18.06L11.75 18.37L12.26 16.35C14.28 16.66 15.82 16.49 16.47 14.65C16.99 13.16 16.34 12.32 15.19 11.75C16.01 11.56 16.6 11.08 16.79 10.02M13.64 14.39C13.23 16.03 10.54 15.28 9.53 15.03L10.15 12.56C11.16 12.82 14.07 13.06 13.64 14.39ZM13.98 10.87C13.63 12.28 11.4 11.66 10.56 11.45L11.1 9.28C11.95 9.49 14.35 9.77 13.98 10.87" fill="white"/>
-                  </svg>
-                </span>
-                <span class="cn">Bitcoin</span>
-                <span class="net">BTC</span>
+              <div class="coin-grid">
+                <div class="coin-opt active" data-coin="BTC" data-network="">
+                  <div class="coin-opt-icon btc">₿</div>
+                  <div class="coin-opt-details">
+                    <div class="coin-opt-name">Bitcoin</div>
+                    <div class="coin-opt-net">BTC</div>
+                  </div>
+                </div>
+                <div class="coin-opt" data-coin="LTC" data-network="">
+                  <div class="coin-opt-icon ltc">Ł</div>
+                  <div class="coin-opt-details">
+                    <div class="coin-opt-name">Litecoin</div>
+                    <div class="coin-opt-net">LTC</div>
+                  </div>
+                </div>
+                <div class="coin-opt" data-coin="USDT" data-network="TRC20">
+                  <div class="coin-opt-icon usdt">₮</div>
+                  <div class="coin-opt-details">
+                    <div class="coin-opt-name">USDT</div>
+                    <div class="coin-opt-net">TRC20</div>
+                  </div>
+                </div>
+                <div class="coin-opt" data-coin="ETH" data-network="">
+                  <div class="coin-opt-icon eth">Ξ</div>
+                  <div class="coin-opt-details">
+                    <div class="coin-opt-name">Ethereum</div>
+                    <div class="coin-opt-net">ETH</div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -229,12 +295,24 @@
   </main>
 
   <footer class="footer">
-    <div class="container"><p>&copy; 2026 LogNest. All rights reserved.</p> </div>
+    <div class="container"><p>&copy; 2026 On A Daily Logs. All rights reserved.</p> </div>
   </footer>
 
   <script>
     const API_BASE = window.__API_BASE__ || window.API_BASE || 'http://localhost:5000/api';
     let selectedCoin = 'BTC', selectedNetwork = '';
+
+    // Handle coin selection interactive states
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.coin-opt').forEach(opt => {
+        opt.addEventListener('click', () => {
+          document.querySelectorAll('.coin-opt').forEach(o => o.classList.remove('active'));
+          opt.classList.add('active');
+          selectedCoin = opt.getAttribute('data-coin');
+          selectedNetwork = opt.getAttribute('data-network') || '';
+        });
+      });
+    });
 
 
 

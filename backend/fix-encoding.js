@@ -6,7 +6,7 @@ let content = fs.readFileSync(filePath, 'utf8');
 
 // Fix all mojibake sequences
 const fixes = [
-  ['My Orders â\x80\x93 LogNest', 'My Orders – LogNest'],
+  ['My Orders â\x80\x93 On A Daily Logs', 'My Orders – On A Daily Logs'],
   ['Loading\xe2\x80\xa6', 'Loading…'],
   ['\xe2\x80\x93', '–'],
   ['\xe2\x80\x94', '—'],
@@ -20,7 +20,7 @@ const fixes = [
 
 // Use regex to find all the double-encoded sequences
 content = content
-  .replace(/My Orders â€" LogNest/g, 'My Orders – LogNest')
+  .replace(/My Orders â€" On A Daily Logs/g, 'My Orders – On A Daily Logs')
   .replace(/Loadingâ€¦/g, 'Loading…')
   .replace(/ðŸ"¦/g, '📦')
   .replace(/ðŸ'µ/g, '💵')

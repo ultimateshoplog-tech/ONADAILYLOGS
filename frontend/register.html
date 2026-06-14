@@ -4,11 +4,10 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register – LogNest</title>
+  <title>Register — On A Daily Logs</title>
   <meta name="description" content="Create a new account to start buying digital goods." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-  <script src="https://unpkg.com/framer-motion/dist/framer-motion.umd.js"></script>
   <script defer src="js/auth.js"></script>
   <script src="js/config.js"></script>
   <script src="js/nav.js"></script>
@@ -16,38 +15,45 @@
 <body data-redirect-auth="dashboard.html" style="margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; background: var(--bg-main);">
   <header class="header">
     <div class="container nav-container">
-      <a href="index.html" class="logo"><img src="images/logo.png" alt="Logo" class="nav-logo" onerror="this.style.display='none'" /></a>
+      <a href="index.html" class="logo">
+        <img src="images/logo.jpg" class="logo-img" alt="Logo">
+        <span>On A Daily Logs</span>
+      </a>
       <nav>
         <ul class="nav-list" id="main-nav"></ul>
       </nav>
     </div>
   </header>
+  
   <main style="display: flex; flex: 1;">
-  <!-- Left Side: Registration Form -->
-  <div class="auth-form-area">
-    <div style="max-width: 440px; width: 100%; margin: 0 auto;" data-fm="fadeIn">
-      
-      <h1 style="font-size: 2.25rem; margin-bottom: 0.5rem; color: var(--primary-deep);">Create Account</h1>
-      <p style="color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1.05rem;">Join the premier digital assets marketplace today.</p>
+    <!-- Left Side: Registration Form -->
+    <div class="auth-form-area">
+      <div style="max-width: 380px; width: 100%; margin: 0 auto;" class="anim-slide-up">
+        
+        <h1 style="font-size: 2rem; margin-bottom: 0.5rem; color: var(--primary-deep); font-weight: 800;">Create account</h1>
+        <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 0.92rem;">Sign up to join our digital goods marketplace.</p>
 
-      <form id="register-form" method="post" onsubmit="return false;">
-        <div style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder="johndoe" required />
-          </div>
-          
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com" required />
-          </div>
-          
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <form id="register-form" method="post" onsubmit="return false;">
+          <div style="display: grid; grid-template-columns: 1fr; gap: 1.25rem;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" class="form-control" placeholder="username" required />
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="email">Email Address</label>
+              <div style="position: relative;">
+                <input type="email" id="email" name="email" class="form-control" placeholder="name@domain.com" required style="padding-right: 2.5rem;" />
+                <span id="email-check-status" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 1rem; display: none;"></span>
+              </div>
+              <div id="email-feedback" style="font-size: 0.78rem; margin-top: 0.4rem; display: none; font-weight: 500;"></div>
+            </div>
+            
             <div class="form-group" style="margin-bottom: 0;">
               <label for="password">Password</label>
               <div style="position: relative;">
                 <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required style="padding-right: 2.5rem;" />
-                <button type="button" onclick="const p = document.getElementById('password'); p.type = p.type === 'password' ? 'text' : 'password'; this.textContent = p.type === 'password' ? '👁' : '🙈';" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.2rem; color: var(--text-muted);">👁</button>
+                <button type="button" onclick="const p = document.getElementById('password'); p.type = p.type === 'password' ? 'text' : 'password'; this.innerHTML = p.type === 'password' ? `<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'></path><circle cx='12' cy='12' r='3'></circle></svg>` : `<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'></path><line x1='1' y1='1' x2='23' y2='23'></line></svg>`;" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
               </div>
             </div>
             
@@ -55,67 +61,56 @@
               <label for="confirm-password">Confirm Password</label>
               <div style="position: relative;">
                 <input type="password" id="confirm-password" name="confirmPassword" class="form-control" placeholder="••••••••" required style="padding-right: 2.5rem;" />
-                <button type="button" onclick="const p = document.getElementById('confirm-password'); p.type = p.type === 'password' ? 'text' : 'password'; this.textContent = p.type === 'password' ? '👁' : '🙈';" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.2rem; color: var(--text-muted);">👁</button>
+                <button type="button" onclick="const p = document.getElementById('confirm-password'); p.type = p.type === 'password' ? 'text' : 'password'; this.innerHTML = p.type === 'password' ? `<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'></path><circle cx='12' cy='12' r='3'></circle></svg>` : `<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'></path><line x1='1' y1='1' x2='23' y2='23'></line></svg>`;" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-muted);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
               </div>
             </div>
           </div>
-        </div>
 
-        <div style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
-          <label style="display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer;">
-            <input type="checkbox" required style="margin-top: 0.25rem; accent-color: var(--primary);" />
-            <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
-              I agree to the <a href="terms.html" style="text-decoration: underline;" target="_blank">Terms of Service</a> and <a href="privacy.html" style="text-decoration: underline;" target="_blank">Privacy Policy</a>.
-            </span>
-          </label>
-        </div>
+          <div style="margin-top: 1.25rem; margin-bottom: 1.25rem;">
+            <label style="display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" required style="margin-top: 0.25rem; accent-color: var(--primary);" />
+              <span style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
+                I agree to the <a href="terms.html" style="text-decoration: underline; color: var(--primary);" target="_blank">Terms of Service</a> and <a href="privacy.html" style="text-decoration: underline; color: var(--primary);" target="_blank">Privacy Policy</a>.
+              </span>
+            </label>
+          </div>
 
-        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.05rem;">Create Account</button>
-      </form>
+          <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 0.95rem;">Create Account</button>
+        </form>
 
-      <p style="text-align: center; margin-top: 2rem; font-size: 0.95rem; color: var(--text-muted);">
-        Already have an account? <a href="login.html" style="font-weight: 600;">Log in here</a>
-      </p>
-    </div>
-  </div>
-
-  <!-- Right Side: Branding/Features Panel -->
-  <div style="flex: 1; display: none; flex-direction: column; justify-content: center; padding: 4rem; background: var(--primary-deep); color: #FFFDF7; position: relative; overflow: hidden;" id="auth-brand-panel">
-    <!-- Decorative Circle -->
-    <div style="position: absolute; top: -10%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, var(--primary), transparent 70%); opacity: 0.5; border-radius: 50%;"></div>
-    
-    <div style="max-width: 500px; margin: 0 auto; position: relative; z-index: 1;" data-fm="slideUp">
-      <div style="background: rgba(255,255,255,0.1); display: inline-flex; padding: 0.75rem; border-radius: 16px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.2);">
-        <span style="font-size: 2rem;">🚀</span>
+        <p style="text-align: center; margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted);">
+          Already have an account? <a href="login.html" style="font-weight: 600; color: var(--primary);">Sign in</a>
+        </p>
       </div>
-      <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; color: #FFFDF7;">Unlock Premium Tools</h2>
-      <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.25rem;">
-        <li style="display: flex; align-items: center; gap: 1rem;">
-          <span style="background: var(--accent-gold); color: #fff; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.8rem;">✓</span>
-          <span style="font-size: 1.1rem; color: rgba(255,255,255,0.9);">Instant automated delivery</span>
-        </li>
-        <li style="display: flex; align-items: center; gap: 1rem;">
-          <span style="background: var(--accent-gold); color: #fff; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.8rem;">✓</span>
-          <span style="font-size: 1.1rem; color: rgba(255,255,255,0.9);">24/7 priority customer support</span>
-        </li>
-        <li style="display: flex; align-items: center; gap: 1rem;">
-          <span style="background: var(--accent-gold); color: #fff; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.8rem;">✓</span>
-          <span style="font-size: 1.1rem; color: rgba(255,255,255,0.9);">Exclusive member-only discounts</span>
-        </li>
-      </ul>
+    </div>
+
+    <!-- Right Side: Branding/Features Panel -->
+    <div style="flex: 1; display: none; flex-direction: column; justify-content: center; padding: 4rem; background: var(--primary-deep); color: #FFFFFF; position: relative; overflow: hidden;" id="auth-brand-panel">
+      <div style="position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, var(--primary), transparent 60%); opacity: 0.15; pointer-events: none;"></div>
       
-      <div style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
-        <p style="font-style: italic; color: rgba(255,255,255,0.7);">"LogNest has the best bank logs I've ever used. Fresh, verified, and always delivered instantly."</p>
-        <p style="margin-top: 0.5rem; font-weight: 600;">— Alex J., Verified Buyer</p>
+      <div style="max-width: 440px; margin: 0 auto; position: relative; z-index: 1;" class="anim-slide-up delay-2">
+        <h2 style="font-size: 2.25rem; margin-bottom: 1.5rem; color: #FFFFFF; font-weight: 800; letter-spacing: -0.03em;">The standard in verified digital assets.</h2>
+        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.25rem;">
+          <li style="display: flex; align-items: start; gap: 0.75rem;">
+            <span style="color: var(--primary); font-weight: 700; font-size: 1.1rem;">✓</span>
+            <span style="font-size: 1rem; color: rgba(255,255,255,0.85); line-height: 1.4;">Automated balance checks and verification before delivery.</span>
+          </li>
+          <li style="display: flex; align-items: start; gap: 0.75rem;">
+            <span style="color: var(--primary); font-weight: 700; font-size: 1.1rem;">✓</span>
+            <span style="font-size: 1rem; color: rgba(255,255,255,0.85); line-height: 1.4;">Instant decryption of delivered access records.</span>
+          </li>
+          <li style="display: flex; align-items: start; gap: 0.75rem;">
+            <span style="color: var(--primary); font-weight: 700; font-size: 1.1rem;">✓</span>
+            <span style="font-size: 1rem; color: rgba(255,255,255,0.85); line-height: 1.4;">Secure BTC and USDT automated funding system.</span>
+          </li>
+        </ul>
+        
+        <div style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+          <p style="font-style: italic; color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">"Clean checkout experience and instant deliveries. Highly recommended marketplace."</p>
+          <p style="margin-top: 0.5rem; font-weight: 600; font-size: 0.9rem;">— Verified Buyer</p>
+        </div>
       </div>
     </div>
-  </div>
   </main>
-  
-  <style>
-    @media (min-width: 900px) {
-      #auth-brand-panel { display: flex !important; }
-    }
-  </style>
 </body>
 </html>

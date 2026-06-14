@@ -1,14 +1,14 @@
-﻿// API_BASE set globally by nav.js — use window.API_BASE with fallback
+// API_BASE set globally by nav.js — use window.API_BASE with fallback
 const API_BASE = window.__API_BASE__ || window.API_BASE || 'http://localhost:5000/api';
 
 // ─── Cart Helpers ──────────────────────────────────────────────────────────────
 function getCart() {
-  try { return JSON.parse(localStorage.getItem('lognest_cart') || '[]'); }
+  try { return JSON.parse(localStorage.getItem('daily_logs_cart') || '[]'); }
   catch { return []; }
 }
 
 function saveCart(cart) {
-  localStorage.setItem('lognest_cart', JSON.stringify(cart));
+  localStorage.setItem('daily_logs_cart', JSON.stringify(cart));
   updateCartBadge();
 }
 
@@ -38,15 +38,18 @@ function removeFromCart(id) {
 }
 
 function clearCart() {
-  localStorage.removeItem('lognest_cart');
+  localStorage.removeItem('daily_logs_cart');
   updateCartBadge();
 }
 
 function updateCartBadge() {
   const cart = getCart();
-  document.querySelectorAll('.cart-badge, .nav-cart-badge').forEach(el => {
+  document.querySelectorAll('.cart-badge').forEach(el => {
     el.textContent = cart.length;
     el.style.display = cart.length > 0 ? 'flex' : 'none';
+  });
+  document.querySelectorAll('.nav-cart-count').forEach(el => {
+    el.textContent = `(${cart.length})`;
   });
 }
 
@@ -99,8 +102,8 @@ function renderCart() {
         <div class="cart-item-name" title="${item.name}">${shortName}</div>
         <div class="cart-item-info">${item.description || ''}</div>
         <div class="cart-item-tags">
-          ${balance ? `<span class="cart-tag">💰 Balance: ${balance}</span>` : ''}
-          ${type    ? `<span class="cart-tag">📋 ${type}</span>` : ''}
+          ${balance ? `<span class="cart-tag">Balance: ${balance}</span>` : ''}
+          ${type    ? `<span class="cart-tag">${type}</span>` : ''}
         </div>
       </div>
       <div class="cart-item-price">$${parseFloat(item.price).toFixed(2)}</div>

@@ -4,113 +4,187 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="../images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — LogNest Admin</title>
+  <title>Dashboard — On A Daily Logs Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/admin.css" />
   <script src="../js/config.js"></script>
   <script defer src="../js/admin.js"></script>
+  <style>
+    /* ── Quick Stats icon boxes ── */
+    .stat-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .stat-icon svg { width: 22px; height: 22px; }
+    .stat-icon-indigo { background: #e0e7ff; color: #4f46e5; }
+    .stat-icon-green  { background: #dcfce7; color: #16a34a; }
+    .stat-icon-amber  { background: #fef3c7; color: #d97706; }
+    .stat-icon-rose   { background: #fee2e2; color: #dc2626; }
+
+    .a-stat-card { display: flex; align-items: center; gap: 1rem; }
+    .stat-text   { flex: 1; }
+
+    /* ── Dashboard two‑col panels ── */
+    .dash-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      padding: 1.5rem 2rem 2rem;
+    }
+    @media (max-width: 900px) { .dash-panels { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .dash-panels { padding: 1rem; } }
+
+    /* ── Welcome banner ── */
+    .welcome-banner {
+      margin: 2rem 2rem 0;
+      background: linear-gradient(135deg, #4338ca 0%, #6366f1 60%, #818cf8 100%);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      overflow: hidden;
+      position: relative;
+    }
+    .welcome-banner::after {
+      content: '';
+      position: absolute;
+      right: -30px; top: -30px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .welcome-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.3rem; }
+    .welcome-sub   { font-size: 0.875rem; opacity: 0.8; }
+    .welcome-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 99px;
+      padding: 0.45rem 1rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+  </style>
 </head>
 <body>
   <div class="a-shell">
 
-    <!-- Sidebar -->
-    <aside class="a-sidebar">
-      <div class="a-brand">
-        <img src="../images/logo.png" alt="LogNest" style="height:38px; width:auto; object-fit:contain;" /><span class="a-brand-tag" style="margin-left:0.4rem;">Admin</span>
-      </div>
-      <nav class="a-nav">
-        <span class="a-nav-label">Main</span>
-        <a href="/admin" class="a-nav-item active"><span class="a-nav-icon">📊</span> Dashboard</a>
-        <span class="a-nav-label">Products</span>
-        <a href="/admin/add-product" class="a-nav-item"><span class="a-nav-icon">➕</span> Add Product</a>
-        <a href="/admin/existing-products" class="a-nav-item"><span class="a-nav-icon">📂</span> All Products</a>
-        <span class="a-nav-label">Management</span>
-        <a href="/admin/orders" class="a-nav-item"><span class="a-nav-icon">🛒</span> Orders</a>
-        
-        <a href="/admin/refunded-logs" class="a-nav-item"><span class="a-nav-icon">↩️</span> Refunded Logs</a>
-        <a href="/admin/users" class="a-nav-item"><span class="a-nav-icon">👥</span> Users</a>
-        <a href="/admin/deposits" class="a-nav-item"><span class="a-nav-icon">💰</span> Deposits</a>
-        <span class="a-nav-label">System</span>
-        <a href="/admin/settings" class="a-nav-item"><span class="a-nav-icon">⚙️</span> Settings</a>
-      </nav>
-      <div class="a-sidebar-footer">
-        <a href="#" id="admin-logout" class="a-logout"><span>🚪</span> Sign Out</a>
-      </div>
-    </aside>
+    <!-- Sidebar (Dynamically rendered by admin.js) -->
+    <aside class="a-sidebar"></aside>
 
     <!-- Main -->
     <main class="a-main">
+
+      <!-- Topbar -->
       <header class="a-topbar">
         <div class="a-topbar-left">
           <h1 class="a-page-title">Dashboard</h1>
-          <p class="a-page-sub">Welcome back, Admin. Here's what's happening.</p>
+          <p class="a-page-sub">Welcome back — here's what's happening today.</p>
         </div>
         <div class="a-topbar-right">
-          <div class="a-avatar">A</div>
+          <div class="a-avatar" title="Admin">A</div>
         </div>
       </header>
 
-      <!-- Stat Cards -->
-      <section class="a-stats">
+      <!-- Welcome Banner -->
+      <div class="welcome-banner">
+        <div>
+          <div class="welcome-title">On A Daily Logs Control Panel</div>
+          <div class="welcome-sub">Monitor store activity, manage users, and process transactions.</div>
+        </div>
+        <span class="welcome-badge">Admin View</span>
+      </div>
+
+      <!-- Stats -->
+      <section class="a-stats" style="margin-top:1.5rem;">
         <div class="a-stat-card">
-          <div class="a-stat-icon" style="background: rgba(99,102,241,0.12); color:#6366f1;">👥</div>
-          <div class="a-stat-body">
+          <div class="stat-icon stat-icon-indigo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="stat-text">
             <p class="a-stat-label">Total Users</p>
-            <p class="a-stat-value" id="total-users">"”</p>
+            <p class="a-stat-value" id="total-users">—</p>
           </div>
         </div>
+
         <div class="a-stat-card">
-          <div class="a-stat-icon" style="background: rgba(16,185,129,0.12); color:#10b981;">💵</div>
-          <div class="a-stat-body">
+          <div class="stat-icon stat-icon-green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg>
+          </div>
+          <div class="stat-text">
             <p class="a-stat-label">Total Revenue</p>
-            <p class="a-stat-value" id="total-revenue" style="color:#10b981;">"”</p>
+            <p class="a-stat-value" id="total-revenue" style="color:#16a34a;">—</p>
           </div>
         </div>
+
         <div class="a-stat-card">
-          <div class="a-stat-icon" style="background: rgba(245,158,11,0.12); color:#f59e0b;">🛒</div>
-          <div class="a-stat-body">
+          <div class="stat-icon stat-icon-indigo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <div class="stat-text">
             <p class="a-stat-label">Total Orders</p>
-            <p class="a-stat-value" id="total-orders">"”</p>
+            <p class="a-stat-value" id="total-orders">—</p>
           </div>
         </div>
+
         <div class="a-stat-card">
-          <div class="a-stat-icon" style="background: rgba(239,68,68,0.12); color:#ef4444;">⏳</div>
-          <div class="a-stat-body">
+          <div class="stat-icon stat-icon-rose">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="stat-text">
             <p class="a-stat-label">Pending Deposits</p>
-            <p class="a-stat-value" id="pending-deposits" style="color:#ef4444;">"”</p>
+            <p class="a-stat-value" id="pending-deposits" style="color:#dc2626;">—</p>
           </div>
         </div>
       </section>
 
-      <!-- Tables Row -->
-      <section class="a-two-col">
+      <!-- Recent Activity Panels -->
+      <div class="dash-panels">
         <div class="a-panel">
           <div class="a-panel-header">
             <h2 class="a-panel-title">Recent Orders</h2>
-            <a href="/admin/orders" class="a-panel-link">View all →</a>
+            <a href="orders.html" class="a-panel-link">View All →</a>
           </div>
           <table class="a-table">
-            <thead><tr><th>Order ID</th><th>User</th><th>Amount</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>User</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
             <tbody id="recent-orders">
               <tr><td colspan="3" class="a-empty">Loading...</td></tr>
             </tbody>
           </table>
         </div>
+
         <div class="a-panel">
           <div class="a-panel-header">
             <h2 class="a-panel-title">Recent Deposits</h2>
-            <a href="/admin/deposits" class="a-panel-link">View all →</a>
+            <a href="deposits.html" class="a-panel-link">View All →</a>
           </div>
           <table class="a-table">
-            <thead><tr><th>Deposit ID</th><th>User</th><th>Amount</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Deposit ID</th>
+                <th>User</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
             <tbody id="recent-deposits">
               <tr><td colspan="3" class="a-empty">Loading...</td></tr>
             </tbody>
           </table>
         </div>
-      </section>
+      </div>
+
     </main>
   </div>
 </body>
 </html>
-

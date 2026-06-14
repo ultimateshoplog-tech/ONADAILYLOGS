@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="../images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>All Products — LogNest Admin</title>
+  <title>All Products — On A Daily Logs Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/admin.css" />
   <script src="../js/config.js"></script>
@@ -12,29 +12,9 @@
 </head>
 <body>
   <div class="a-shell">
-    <aside class="a-sidebar">
-      <div class="a-brand">
-        <img src="../images/logo.png" alt="LogNest" style="height:38px; width:auto; object-fit:contain;" /><span class="a-brand-tag" style="margin-left:0.4rem;">Admin</span>
-      </div>
-      <nav class="a-nav">
-        <span class="a-nav-label">Main</span>
-        <a href="/admin" class="a-nav-item"><span class="a-nav-icon">📊</span> Dashboard</a>
-        <span class="a-nav-label">Products</span>
-        <a href="/admin/add-product" class="a-nav-item"><span class="a-nav-icon">➕</span> Add Product</a>
-        <a href="/admin/existing-products" class="a-nav-item active"><span class="a-nav-icon">📂</span> All Products</a>
-        <span class="a-nav-label">Management</span>
-        <a href="/admin/orders" class="a-nav-item"><span class="a-nav-icon">🛒</span> Orders</a>
-        
-        <a href="/admin/refunded-logs" class="a-nav-item"><span class="a-nav-icon">↩️</span> Refunded Logs</a>
-        <a href="/admin/users" class="a-nav-item"><span class="a-nav-icon">👥</span> Users</a>
-        <a href="/admin/deposits" class="a-nav-item"><span class="a-nav-icon">💰</span> Deposits</a>
-        <span class="a-nav-label">System</span>
-        <a href="/admin/settings" class="a-nav-item"><span class="a-nav-icon">⚙️</span> Settings</a>
-      </nav>
-      <div class="a-sidebar-footer">
-        <a href="#" id="admin-logout" class="a-logout"><span>🚪</span> Sign Out</a>
-      </div>
-    </aside>
+    
+    <!-- Sidebar (Dynamically rendered by admin.js) -->
+    <aside class="a-sidebar"></aside>
 
     <main class="a-main">
       <header class="a-topbar">
@@ -43,7 +23,7 @@
           <p class="a-page-sub">Browse, edit, and manage your product catalog.</p>
         </div>
         <div class="a-topbar-right">
-          <a href="/admin/add-product" class="a-btn a-btn-primary">➕ Add Product</a>
+          <a href="add-product.html" class="a-btn a-btn-primary">Add Product</a>
           <div class="a-avatar">A</div>
         </div>
       </header>
@@ -76,4 +56,3 @@
   </div>
 </body>
 </html>
-

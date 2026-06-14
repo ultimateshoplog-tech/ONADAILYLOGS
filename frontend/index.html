@@ -1,68 +1,109 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LogNest – Premium Digital Assets</title>
-  <meta name="description" content="Premium digital goods marketplace with sleek dark cyberpunk design. Browse, purchase, and manage your digital assets." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>On A Daily Logs — Premium Digital Assets</title>
+  <meta name="description" content="A minimalist digital marketplace for verified bank logs with automated delivery." />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script src="js/config.js"></script>
   <script src="js/nav.js"></script>
+  <style>
+    .feature-col {
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .feature-col:hover {
+      transform: translateY(-2px);
+    }
+    .feature-icon-wrap {
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    .feature-col:hover .feature-icon-wrap {
+      transform: scale(1.08);
+      background: rgba(90, 49, 244, 0.14) !important;
+    }
+  </style>
 </head>
 <body>
   <header class="header">
     <div class="container nav-container">
-      <a href="index.html" class="logo"><img src="images/logo.png" alt="Logo" class="nav-logo" onerror="this.style.display='none'" /></a>
+      <a href="index.html" class="logo">
+        <img src="images/logo.jpg" class="logo-img" alt="Logo">
+        <span>On A Daily Logs</span>
+      </a>
       <nav>
         <ul class="nav-list" id="main-nav"></ul>
       </nav>
     </div>
   </header>
 
-  <main class="main-content container">
-    <section class="hero" data-fm="fadeIn">
-      <h1>Welcome to the <span>LogNest</span></h1>
-      <p>A top-tier, highly secure platform designed for handling high-balance logs.</p>
-      <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-        <button class="btn btn-primary" onclick="location.href='store.html'">Start Shopping</button>
-        <button class="btn btn-outline" onclick="location.href='register.html'">Join Now</button>
-      </div>
-    </section>
+  <main class="main-content">
+    <div class="container">
+      <!-- Minimal ShopPay-Style Hero Section -->
+      <section class="hero anim-slide-up" style="border: none;">
+        <h1 style="font-weight: 800;">
+          The simple way to buy <br><span>verified bank logs & cards.</span>
+        </h1>
+        <p>A secure digital goods marketplace designed for instant checkout. Get full access credentials and card details delivered directly to your dashboard.</p>
+        <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+          <button class="btn btn-primary" onclick="location.href='store.html'">Start Shopping</button>
+          <button class="btn btn-outline" onclick="location.href='register.html'">Create Account</button>
+        </div>
+      </section>
 
-    <section data-fm="slideUp" style="margin-top: 4rem;">
-      <h2 style="margin-bottom: 2rem; font-size: 2rem; text-align: center;">Featured Products</h2>
-      <div class="card-grid" id="featured-products">
-        <div class="card">
-          <div style="height: 150px; background: var(--bg-accent); border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
-            <span style="font-size: 3rem; color: var(--primary-deep);">🌐</span>
+      <!-- Minimal Features Section -->
+      <section class="anim-slide-up delay-1" style="margin-top: 2rem; padding: 4rem 0; border-top: 1px solid var(--border-soft);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem; text-align: left;">
+          <div class="feature-col">
+            <div class="feature-icon-wrap" style="width: 48px; height: 48px; border-radius: 12px; background: rgba(90, 49, 244, 0.08); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: var(--primary);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; font-weight: 700;">Instant Delivery</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">No waiting times. As soon as your deposit is verified, your purchased credentials are ready to be revealed on your dashboard.</p>
           </div>
-          <h3>Bank Logs with Online Access</h3>
-          <p style="color: var(--text-muted); margin-bottom: 1rem;">Full online banking access with verified credentials and secure login details.</p>
-        </div>
-        <div class="card">
-          <div style="height: 150px; background: var(--bg-accent); border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
-            <span style="font-size: 3rem; color: var(--primary-deep);">📞</span>
+          <div class="feature-col">
+            <div class="feature-icon-wrap" style="width: 48px; height: 48px; border-radius: 12px; background: rgba(90, 49, 244, 0.08); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: var(--primary);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="m9 11 2 2 4-4"></path>
+              </svg>
+            </div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; font-weight: 700;">Verified Authenticity</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">Each account is rigorously checked to guarantee correct balance indicators and live access statuses before list placement.</p>
           </div>
-          <h3>Bank Logs with Calling Access</h3>
-          <p style="color: var(--text-muted); margin-bottom: 1rem;">Bank logs bundled with phone calling access for complete account management.</p>
-        </div>
-        <div class="card">
-          <div style="height: 150px; background: var(--bg-accent); border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;">
-            <span style="font-size: 3rem; color: var(--primary-deep);">✉️</span>
+          <div class="feature-col">
+            <div class="feature-icon-wrap" style="width: 48px; height: 48px; border-radius: 12px; background: rgba(90, 49, 244, 0.08); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: var(--primary);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+              </svg>
+            </div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; font-weight: 700;">Secure Transactions</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">Fund your account wallet easily using secure cryptocurrency options (BTC or USDT) to protect your transaction identity.</p>
           </div>
-          <h3>Bank Logs with Email Access</h3>
-          <p style="color: var(--text-muted); margin-bottom: 1rem;">Bank logs with linked email access for full verification and recovery control.</p>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <!-- Minimal Callout Card -->
+      <section class="card anim-slide-up delay-2" style="padding: 3rem; text-align: center; margin-top: 4rem; background: var(--bg-accent); border: none;">
+        <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--primary-deep);">Ready to get started?</h2>
+        <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 1.5rem; font-size: 0.95rem;">Join thousands of clients utilizing our secure interface. Top up your account and purchase verified bank logs & cards instantly.</p>
+        <button class="btn btn-primary" onclick="location.href='store.html'">Explore Store</button>
+      </section>
+    </div>
   </main>
 
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2026 LogNest. All rights reserved. Premium Digital Commerce.</p>
-      
+      <p>&copy; 2026 On A Daily Logs. All rights reserved.</p>
+      <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 2rem;">
+        <a href="terms.html" style="font-size: 0.85rem; color: var(--text-muted);">Terms of Service</a>
+        <a href="privacy.html" style="font-size: 0.85rem; color: var(--text-muted);">Privacy Policy</a>
+      </div>
     </div>
   </footer>
 </body>

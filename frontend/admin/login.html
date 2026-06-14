@@ -4,132 +4,208 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="../images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Login – LogNest</title>
+  <title>Admin Login — On A Daily Logs</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/admin.css" />
   <script src="../js/config.js"></script>
   <script defer src="../js/auth.js"></script>
   <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      background: #0a1a1a;
-      background-image: radial-gradient(ellipse at 60% 0%, rgba(13,79,79,0.35) 0%, transparent 65%),
-                        radial-gradient(ellipse at 10% 100%, rgba(26,122,122,0.15) 0%, transparent 55%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+      padding: 1rem;
     }
 
-    .login-box {
-      width: 100%; max-width: 420px;
-      background: #0f2020;
-      border: 1px solid #0d2e2e;
-      border-top: 3px solid #1A7A7A;
-      border-radius: 18px;
-      padding: 2.5rem 2rem;
-      box-shadow: 0 24px 70px rgba(0,0,0,.5), 0 0 0 1px rgba(26,122,122,0.08);
+    .login-wrap {
+      width: 100%;
+      max-width: 420px;
     }
 
-    /* Logo area */
-    .login-logo {
-      display: flex; align-items: center; justify-content: center; gap: 0.9rem;
-      margin-bottom: 2rem; padding-bottom: 1.75rem;
-      border-bottom: 1px solid #0d2e2e;
+    /* Logo area above card */
+    .login-header {
+      text-align: center;
+      margin-bottom: 1.75rem;
     }
-    .login-logo img { height: 44px; width: auto; object-fit: contain; }
-    .login-logo-tag {
-      font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
-      background: rgba(26,122,122,0.2); color: #5bb8b8;
-      border: 1px solid rgba(26,122,122,0.3);
-      padding: 0.2rem 0.6rem; border-radius: 99px; white-space: nowrap;
+    .login-logo-img {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.25);
+      margin-bottom: 0.75rem;
+    }
+    .login-brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+    .login-brand-tag {
+      display: inline-block;
+      margin-left: 0.4rem;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      background: rgba(255,255,255,0.15);
+      color: #e0e7ff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 0.2rem 0.55rem;
+      border-radius: 99px;
+      vertical-align: middle;
     }
 
-    .login-title  { font-size: 1.2rem; font-weight: 700; color: #e0f0f0; text-align: center; margin-bottom: 0.4rem; }
-    .login-sub    { font-size: 0.84rem; color: #3d6060; text-align: center; margin-bottom: 1.75rem; }
+    /* Card */
+    .login-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 2.25rem 2rem;
+      box-shadow: 0 24px 60px rgba(30,27,75,0.4);
+    }
+    .login-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #1e1b4b;
+      margin-bottom: 0.3rem;
+    }
+    .login-sub {
+      font-size: 0.83rem;
+      color: #6b7280;
+      margin-bottom: 1.75rem;
+    }
 
-    /* Labels */
-    .l-label { display: block; font-size: 0.78rem; font-weight: 600; color: #94b8b8; margin-bottom: 0.4rem; }
+    /* Label */
+    .l-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #1e1b4b;
+      margin-bottom: 0.4rem;
+    }
 
-    /* Inputs */
+    /* Input */
     .l-input {
-      width: 100%; padding: 0.75rem 1rem;
-      background: #0a1a1a; border: 1px solid #0d2e2e;
-      border-radius: 9px; color: #e0f0f0;
-      font-size: 0.875rem; font-family: 'Inter', sans-serif;
-      margin-bottom: 1.1rem; transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: #f5f7ff;
+      border: 1.5px solid #e0e7ff;
+      border-radius: 10px;
+      color: #1e1b4b;
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 1.1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     .l-input:focus {
       outline: none;
-      border-color: #1A7A7A;
-      box-shadow: 0 0 0 3px rgba(26,122,122,0.18);
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+      background: #fff;
     }
-    .l-input::placeholder { color: #1e4040; }
+    .l-input::placeholder { color: #a5b4fc; }
 
     /* Password wrap */
     .l-pw-wrap { position: relative; margin-bottom: 1.1rem; }
     .l-pw-wrap .l-input { margin-bottom: 0; padding-right: 3rem; }
     .l-pw-toggle {
       position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer; font-size: 1rem; color: #3d6060;
+      background: none; border: none; cursor: pointer;
+      color: #6366f1; display: flex; align-items: center; justify-content: center;
       transition: color 0.2s;
     }
-    .l-pw-toggle:hover { color: #5bb8b8; }
+    .l-pw-toggle:hover { color: #4338ca; }
 
-    /* Submit button */
+    /* Submit */
     .l-btn {
-      width: 100%; padding: 0.875rem;
-      background: linear-gradient(135deg, #0D4F4F, #1A7A7A);
-      color: #e0f0f0; border: none; border-radius: 9px;
-      font-size: 0.95rem; font-weight: 700; cursor: pointer;
+      width: 100%;
+      padding: 0.875rem;
+      background: linear-gradient(135deg, #4338ca, #6366f1);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 0.5rem;
       transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
-      margin-top: 0.75rem; letter-spacing: 0.01em;
-      box-shadow: 0 4px 16px rgba(13,79,79,0.35);
+      box-shadow: 0 4px 16px rgba(79,70,229,0.35);
+      letter-spacing: 0.01em;
     }
     .l-btn:hover {
-      opacity: 0.92; transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(13,79,79,0.45);
+      opacity: 0.93;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(79,70,229,0.45);
     }
+    .l-btn:active { transform: translateY(0); }
 
     /* Error */
     #login-error {
-      display: none; margin-bottom: 1rem; padding: 0.75rem 1rem;
-      background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.25);
-      border-radius: 8px; color: #f87171; font-size: 0.85rem;
+      display: none;
+      margin-bottom: 1rem;
+      padding: 0.75rem 1rem;
+      background: rgba(239,68,68,0.07);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 8px;
+      color: #dc2626;
+      font-size: 0.84rem;
     }
 
     /* Back link */
     .l-back {
-      display: block; text-align: center; margin-top: 1.5rem;
-      font-size: 0.82rem; color: #2a4a4a; text-decoration: none;
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
       transition: color 0.2s;
     }
-    .l-back:hover { color: #5bb8b8; }
+    .l-back:hover { color: #fff; }
   </style>
 </head>
 <body>
-  <div class="login-box">
+  <div class="login-wrap">
 
-    <!-- Logo -->
-    <div class="login-logo">
-      <img src="../images/logo.png" alt="LogNest" />
-      <span class="login-logo-tag">Admin Panel</span>
+    <!-- Header -->
+    <div class="login-header">
+      <img src="../images/logo.png" class="login-logo-img" alt="Logo" onerror="this.src='../images/logo.jpg'" />
+      <div>
+        <span class="login-brand">On A Daily Logs</span>
+        <span class="login-brand-tag">Admin</span>
+      </div>
     </div>
 
-    <h1 class="login-title">Secure Access</h1>
-    <p class="login-sub">Sign in to the control panel</p>
+    <!-- Card -->
+    <div class="login-card">
+      <h1 class="login-title">Secure Access</h1>
+      <p class="login-sub">Sign in to the admin control panel</p>
 
-    <div id="login-error"></div>
+      <div id="login-error"></div>
 
-    <form id="login-form">
-      <label class="l-label" for="username">Username</label>
-      <input type="text" id="username" name="username" class="l-input" placeholder="admin" required autocomplete="username" />
+      <form id="login-form">
+        <label class="l-label" for="username">Username</label>
+        <input type="text" id="username" name="username" class="l-input" placeholder="admin" required autocomplete="username" />
 
-      <label class="l-label" for="password">Password</label>
-      <div class="l-pw-wrap">
-        <input type="password" id="password" name="password" class="l-input" placeholder="••••••••" required autocomplete="current-password" />
-        <button type="button" class="l-pw-toggle" onclick="const p=document.getElementById('password');p.type=p.type==='password'?'text':'password';this.textContent=p.type==='password'?'👁':'🙈';">👁</button>
-      </div>
+        <label class="l-label" for="password">Password</label>
+        <div class="l-pw-wrap">
+          <input type="password" id="password" name="password" class="l-input" placeholder="••••••••" required autocomplete="current-password" />
+          <button type="button" class="l-pw-toggle" onclick="
+            const p = document.getElementById('password');
+            p.type = p.type === 'password' ? 'text' : 'password';
+            this.innerHTML = p.type === 'password'
+              ? `<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'></path><circle cx='12' cy='12' r='3'></circle></svg>`
+              : `<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'></path><line x1='1' y1='1' x2='23' y2='23'></line></svg>`;
+          ">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
 
-      <button type="submit" class="l-btn">Authenticate →</button>
-    </form>
+        <button type="submit" class="l-btn">Authenticate →</button>
+      </form>
+    </div>
 
     <a href="../index.html" class="l-back">← Return to Storefront</a>
   </div>

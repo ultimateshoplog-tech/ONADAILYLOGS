@@ -1,5 +1,5 @@
 -- ============================================================
--- LogNest Bug-Fix Migration
+-- On A Daily Logs Bug-Fix Migration
 -- Run this in your Supabase SQL editor ONCE
 -- ============================================================
 
@@ -7,7 +7,7 @@
 -- Allows 'oxapay' and 'nowpayments' as valid deposit methods
 ALTER TABLE deposits DROP CONSTRAINT IF EXISTS deposits_method_check;
 ALTER TABLE deposits ADD CONSTRAINT deposits_method_check
-  CHECK (method IN ('manual', 'bitcoin', 'usdt', 'oxapay', 'nowpayments'));
+  CHECK (method IN ('bitcoin', 'usdt', 'oxapay', 'nowpayments'));
 
 -- ── Bug #3: Reveal tokens table (replaces in-memory Map) ──────
 -- Serverless-safe: tokens survive across Vercel function instances

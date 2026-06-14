@@ -1,14 +1,41 @@
 require('dotenv').config();
 const express    = require('express');
 const cors       = require('cors');
+const fs         = require('fs');
 const path       = require('path');
 const helmet     = require('helmet');
 const rateLimit  = require('express-rate-limit');
 
 
 const app  = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5005;
 const isProd = process.env.NODE_ENV === 'production';
+
+const uploadPath = path.resolve(
+  process.env.UPLOAD_PATH ||
+  (process.env.VERCEL === '1' ? '/tmp/uploads' : path.join(__dirname, 'uploads'))
+);
+
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath, { recursive: true });
+}
+
+if (isProd) {
+  app.set('trust proxy', 1);
+}
+
+const requiredEnv = ['DATABASE_URL', 'JWT_SECRET'];
+
+const missingEnv = requiredEnv.filter(key => !process.env[key] || !process.env[key].trim());
+if (missingEnv.length > 0) {
+  console.error('FATAL: Missing required environment variables:', missingEnv.join(', '));
+  process.exit(1);
+}
+
+if (isProd && process.env.JWT_SECRET === 'your_super_secret_jwt_key_change_this_in_production') {
+  console.error('FATAL: JWT_SECRET is still the placeholder value in production.');
+  process.exit(1);
+}
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 // Dev:  allow localhost origins
@@ -18,13 +45,13 @@ const devOrigins = [
   'http://127.0.0.1:3000',
   'http://localhost:5500',
   'http://127.0.0.1:5500',
-  'http://localhost:5000',
-  'http://127.0.0.1:5000',
+  'http://localhost:5005',
+  'http://127.0.0.1:5005',
 ];
 
 const prodOrigins = [
-  'https://lognest.store',
-  'https://www.lognest.store',
+  'https://ondailylogs.store',
+  'https://www.ondailylogs.store',
   ...(process.env.ALLOWED_ORIGINS || '')
     .split(',')
     .map(o => o.trim())
@@ -72,14 +99,14 @@ app.use(express.json({
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ─── Static Files ─────────────────────────────────────────────────────────────
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(uploadPath));
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 // Strict rate limit on auth endpoints to prevent brute-force
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 30,                   // max 30 attempts per window per IP
+  max: 300,                  // max 300 attempts per window per IP
   standardHeaders: true,
   legacyHeaders: false,
   message: { success: false, message: 'Too many requests from this IP. Please try again in 15 minutes.' },
@@ -96,7 +123,7 @@ app.use('/api/admin',    require('./routes/admin'));
 app.get('/api/health', (req, res) => {
   res.json({
     success:     true,
-    message:     'LogNest API is running 🚀',
+    message:     'On A Daily Logs API is running 🚀',
     environment: isProd ? 'production' : 'development',
     timestamp:   new Date(),
   });
@@ -117,8 +144,8 @@ app.use((err, req, res, next) => {
 
 // ─── Start Server (local only — Vercel handles this in production) ────────────
 if (process.env.VERCEL !== '1') {
-  app.listen(PORT, () => {
-    console.log(`\n🚀 LogNest API running on http://localhost:${PORT}`);
+  const server = app.listen(PORT, () => {
+    console.log(`\n🚀 On A Daily Logs API running on http://localhost:${PORT}`);
     console.log(`🌍 Environment : ${isProd ? 'PRODUCTION' : 'development'}`);
     console.log(`🔒 CORS origins: ${allowedOrigins.join(', ') || '(none set!)'}`);
     console.log(`📋 Health check: http://localhost:${PORT}/api/health\n`);
@@ -129,6 +156,15 @@ if (process.env.VERCEL !== '1') {
     if (process.env.JWT_SECRET === 'your_super_secret_jwt_key_change_this_in_production') {
       console.warn('⚠️  WARNING: JWT_SECRET is still the default placeholder — change it before going live!');
     }
+  });
+
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`FATAL: Port ${PORT} is already in use. Stop the process using that port or set a different PORT value.`);
+      process.exit(1);
+    }
+    console.error('Server error:', error);
+    process.exit(1);
   });
 }
 

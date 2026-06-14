@@ -85,7 +85,7 @@ async function loadProducts() {
           </div>
         `;
       } else {
-        data.products.forEach(p => {
+        data.products.forEach((p, index) => {
           const initial = p.category_name ? p.category_name.charAt(0) : 'B';
 
           // Parse balance from product name e.g. "Chase Bank Log — $43,988 Balance"
@@ -100,28 +100,31 @@ async function loadProducts() {
           const shortName = (p.category_name || p.name).split(' Log')[0].trim();
 
           const card = document.createElement('div');
-          card.className = 'card product-card';
+          const delayClass = `delay-${Math.min((index % 4) + 1, 4)}`;
+          card.className = `card product-card anim-slide-up ${delayClass}`;
           card.innerHTML = `
             <div class="product-card-header">
               <div class="bank-logo-placeholder">${initial}</div>
               <div style="overflow: hidden; min-width: 0;">
-                <span style="font-size: 0.68rem; text-transform: uppercase; font-weight: 700; color: var(--accent-terra); display: block;">${p.category_name || 'Uncategorized'}</span>
-                <h3 style="font-size: 0.92rem; color: var(--text-main); margin: 0; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${shortName}</h3>
+                <span style="font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--primary); display: block; letter-spacing: 0.05em; margin-bottom: 0.1rem;">${p.category_name || 'Uncategorized'}</span>
+                <h3 style="font-size: 0.95rem; color: var(--primary-deep); margin: 0; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700;">${shortName}</h3>
               </div>
             </div>
-            <div style="font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 0.5rem;">$${p.price.toFixed(2)}</div>
-            <div style="background: var(--bg-main); border-radius: 6px; padding: 0.6rem 0.75rem; margin-bottom: 0.6rem; flex-grow: 1; border: 1px solid var(--border-soft); font-size: 0.78rem; overflow: hidden; min-width: 0;">
-              <div style="display: flex; margin-bottom: 0.3rem;">
-                <strong style="color: var(--text-main); width: 65px; flex-shrink: 0;">Balance:</strong>
-                <span style="color: var(--primary-deep); font-family: monospace; font-weight: 700;">$${balance}</span>
+            
+            <div style="margin: 0.5rem 0 1rem; flex-grow: 1;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.25rem;">
+                <span style="color: var(--text-muted);">Balance</span>
+                <span style="color: var(--primary-deep); font-weight: 700; font-family: monospace;">$${balance}</span>
               </div>
-              <div style="display: flex; margin-bottom: 0.3rem; min-width: 0;">
-                <strong style="color: var(--text-main); width: 65px; flex-shrink: 0;">Type:</strong>
-                <span style="color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${type}</span>
+              <div style="display: flex; justify-content: space-between; font-size: 0.82rem;">
+                <span style="color: var(--text-muted);">Type</span>
+                <span style="color: var(--text-main); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px;">${type}</span>
               </div>
             </div>
-            <div style="margin-top: auto;">
-              <button class="btn btn-outline" style="width: 100%; padding: 0.45rem; font-size: 0.82rem;" data-product-id="${p.id}">👁 View Details</button>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-soft); padding-top: 0.75rem; margin-top: auto;">
+              <span style="font-size: 1.1rem; font-weight: 800; color: var(--primary-deep);">$${p.price.toFixed(2)}</span>
+              <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem; border-radius: var(--radius-pill);" data-product-id="${p.id}">Details</button>
             </div>
           `;
 

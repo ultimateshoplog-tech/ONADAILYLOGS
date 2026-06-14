@@ -83,6 +83,64 @@ if (registerForm) {
   const submitBtn = registerForm.querySelector('button[type="submit"]');
   submitBtn.dataset.label = submitBtn.textContent;
 
+  // Real-time email validation
+  const emailInput = document.getElementById('email');
+  const emailFeedback = document.getElementById('email-feedback');
+  const emailStatus = document.getElementById('email-check-status');
+
+  const disposableDomains = [
+    'yopmail.com', 'mailinator.com', 'tempmail.com', 'guerrillamail.com', 
+    'sharklasers.com', 'dispostable.com', 'getairmail.com', 'maildrop.cc', 
+    'temp-mail.org', 'throwawaymail.com', '10minutemail.com', 'crazymailing.com', 
+    'trashmail.com', 'generator.email'
+  ];
+
+  let isEmailValid = false;
+
+  if (emailInput && emailFeedback && emailStatus) {
+    emailInput.addEventListener('input', () => {
+      const email = emailInput.value.trim();
+      if (!email) {
+        emailFeedback.style.display = 'none';
+        emailStatus.style.display = 'none';
+        isEmailValid = false;
+        return;
+      }
+
+      // Syntax check
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        emailFeedback.style.display = 'block';
+        emailFeedback.style.color = '#ef4444';
+        emailFeedback.textContent = 'Please enter a valid email address.';
+        emailStatus.style.display = 'block';
+        emailStatus.textContent = '❌';
+        isEmailValid = false;
+        return;
+      }
+
+      // Disposable check
+      const domain = email.split('@')[1]?.toLowerCase();
+      if (disposableDomains.includes(domain)) {
+        emailFeedback.style.display = 'block';
+        emailFeedback.style.color = '#ef4444';
+        emailFeedback.textContent = 'Disposable or temporary emails are not allowed.';
+        emailStatus.style.display = 'block';
+        emailStatus.textContent = '❌';
+        isEmailValid = false;
+        return;
+      }
+
+      // Valid syntax & domain
+      emailFeedback.style.display = 'block';
+      emailFeedback.style.color = '#16a34a';
+      emailFeedback.textContent = 'Email address format looks good.';
+      emailStatus.style.display = 'block';
+      emailStatus.textContent = '✅';
+      isEmailValid = true;
+    });
+  }
+
   registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     clearError();
@@ -91,6 +149,11 @@ if (registerForm) {
     const email           = document.getElementById('email').value.trim();
     const password        = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
+
+    if (emailInput && emailFeedback && !isEmailValid) {
+      showError('Please provide a valid, non-disposable email address.');
+      return;
+    }
 
     if (password !== confirmPassword) {
       showError('Passwords do not match.');

@@ -4,37 +4,54 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="../images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add Product – LogNest Admin</title>
+  <title>Add Product — On A Daily Logs Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/admin.css" />
   <script src="../js/config.js"></script>
   <script defer src="../js/admin.js"></script>
+  <style>
+    /* Tool type area */
+    .tool-type-label {
+      font-size: 0.8rem; font-weight: 700; color: #4338ca;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      margin-bottom: 0.4rem; display: block;
+    }
+    /* Dynamic fields container */
+    #dynamic-tool-fields {
+      background: #f5f7ff;
+      border: 1px solid #e0e7ff;
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .a-input, .a-textarea {
+      background: #fff;
+    }
+    select.a-input {
+      background: #fff;
+      color: #1e1b4b;
+    }
+    .form-section-divider {
+      border: none;
+      border-top: 1px solid #e0e7ff;
+      margin: 1.5rem 0;
+    }
+    .cheque-preview {
+      margin-top: 0.5rem;
+      display: none;
+      max-width: 220px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #e0e7ff;
+    }
+    .cheque-preview img { width: 100%; display: block; }
+  </style>
 </head>
 <body>
   <div class="a-shell">
-    <aside class="a-sidebar">
-      <div class="a-brand">
-        <img src="../images/logo.png" alt="LogNest" style="height:38px; width:auto; object-fit:contain;" /><span class="a-brand-tag" style="margin-left:0.4rem;">Admin</span>
-      </div>
-      <nav class="a-nav">
-        <span class="a-nav-label">Main</span>
-        <a href="/admin" class="a-nav-item"><span class="a-nav-icon">📊</span> Dashboard</a>
-        <span class="a-nav-label">Products</span>
-        <a href="/admin/add-product" class="a-nav-item active"><span class="a-nav-icon">➕</span> Add Product</a>
-        <a href="/admin/existing-products" class="a-nav-item"><span class="a-nav-icon">📂</span> All Products</a>
-        <span class="a-nav-label">Management</span>
-        <a href="/admin/orders" class="a-nav-item"><span class="a-nav-icon">🛒</span> Orders</a>
-        
-        <a href="/admin/refunded-logs" class="a-nav-item"><span class="a-nav-icon">↩️</span> Refunded Logs</a>
-        <a href="/admin/users" class="a-nav-item"><span class="a-nav-icon">👥</span> Users</a>
-        <a href="/admin/deposits" class="a-nav-item"><span class="a-nav-icon">💰</span> Deposits</a>
-        <span class="a-nav-label">System</span>
-        <a href="/admin/settings" class="a-nav-item"><span class="a-nav-icon">⚙️</span> Settings</a>
-      </nav>
-      <div class="a-sidebar-footer">
-        <a href="#" id="admin-logout" class="a-logout"><span>🚪</span> Sign Out</a>
-      </div>
-    </aside>
+
+    <!-- Sidebar (Dynamically rendered by admin.js) -->
+    <aside class="a-sidebar"></aside>
 
     <main class="a-main">
       <header class="a-topbar">
@@ -50,37 +67,134 @@
       <div class="a-content">
         <div class="a-card" id="add-product-form">
           <form id="product-form">
+
+            <!-- Basic Details -->
             <div class="a-form-grid">
               <div class="a-form-group">
                 <label for="name">Product Name</label>
                 <input type="text" id="name" name="name" class="a-input" placeholder="e.g. Chase Bank Log" required />
               </div>
               <div class="a-form-group">
-                <label for="category">Category</label>
-                <input type="text" id="category" name="category" class="a-input" placeholder="e.g. Bank Logs" />
+                <label for="category_id">Category</label>
+                <select id="category_id" name="category_id" class="a-input" required>
+                  <option value="">Select Category...</option>
+                </select>
               </div>
               <div class="a-form-group">
                 <label for="price">Price (USD)</label>
                 <input type="number" id="price" name="price" step="0.01" min="0" class="a-input" placeholder="0.00" required />
               </div>
               <div class="a-form-group">
-                <label for="stock">Stock (copies available)</label>
+                <label for="stock">Stock (copies)</label>
                 <input type="number" id="stock" name="stock" class="a-input" value="1" min="-1" required />
-                <small style="color:#9ca3af; font-size:0.85rem;">Enter -1 for unlimited stock.</small>
+                <small style="color:#6366f1; font-size:0.78rem;">Enter -1 for unlimited.</small>
               </div>
             </div>
+
             <div class="a-form-group">
               <label for="description">Public Description</label>
               <textarea id="description" name="description" class="a-textarea" placeholder="What the customer sees before buying..." required></textarea>
             </div>
+
+            <hr class="form-section-divider" />
+
+            <!-- Delivery Type Selector -->
             <div class="a-form-group">
-              <label for="product_data">Delivered Content <span style="font-weight:400; color:#9ca3af;">(hidden until purchased)</span></label>
-              <textarea id="product_data" name="product_data" class="a-textarea" style="min-height:120px;" placeholder="The actual log data, credentials, or content delivered after purchase..." required></textarea>
+              <span class="tool-type-label">Delivered Item Type</span>
+              <select id="tool_type" name="tool_type" class="a-input" style="max-width:320px;" onchange="switchToolFields(this.value)">
+                <option value="text">Plain Text / Custom Log File</option>
+                <option value="bank">Bank Log</option>
+                <option value="card">Credit Card Full Details</option>
+                <option value="rdp">RDP Connection Profile</option>
+                <option value="smtp">SMTP Server Profile</option>
+                <option value="cheque">Cheque Front/Back Images</option>
+              </select>
             </div>
-            <div style="display:flex; gap: 1rem; align-items: center;">
+
+            <!-- Dynamic Tool Fields -->
+            <div id="dynamic-tool-fields">
+              <!-- Plain Text -->
+              <div id="fields-text" class="tool-subfields">
+                <div class="a-form-group" style="margin-bottom:0;">
+                  <label for="product_data_text">Log File Content</label>
+                  <textarea id="product_data_text" class="a-textarea" style="min-height:150px; font-family:monospace;" placeholder="Paste raw cookies, log accounts, or generic credentials..."></textarea>
+                </div>
+              </div>
+
+              <!-- Bank Log -->
+              <div id="fields-bank" class="tool-subfields" style="display:none;">
+                <div class="a-form-grid">
+                  <div class="a-form-group"><label>Bank Name</label><input type="text" id="bank_name" class="a-input" placeholder="e.g. Chase Bank" /></div>
+                  <div class="a-form-group"><label>Balance</label><input type="text" id="bank_balance" class="a-input" placeholder="e.g. $12,500.00" /></div>
+                  <div class="a-form-group"><label>Account Number</label><input type="text" id="bank_acc" class="a-input" /></div>
+                  <div class="a-form-group"><label>Routing Number</label><input type="text" id="bank_routing" class="a-input" /></div>
+                  <div class="a-form-group"><label>Username</label><input type="text" id="bank_user" class="a-input" /></div>
+                  <div class="a-form-group"><label>Password</label><input type="text" id="bank_pass" class="a-input" /></div>
+                  <div class="a-form-group"><label>IP Address</label><input type="text" id="bank_ip" class="a-input" placeholder="192.168.1.1" /></div>
+                </div>
+              </div>
+
+              <!-- Credit Card -->
+              <div id="fields-card" class="tool-subfields" style="display:none;">
+                <div class="a-form-grid">
+                  <div class="a-form-group"><label>Card Number</label><input type="text" id="card_num" class="a-input" placeholder="4111 2222 3333 4444" /></div>
+                  <div class="a-form-group"><label>Expire Date</label><input type="text" id="card_exp" class="a-input" placeholder="MM/YY" /></div>
+                  <div class="a-form-group"><label>CVV</label><input type="text" id="card_cvv" class="a-input" placeholder="123" /></div>
+                  <div class="a-form-group"><label>Holder Name</label><input type="text" id="card_name" class="a-input" /></div>
+                  <div class="a-form-group"><label>Email Address</label><input type="email" id="card_email" class="a-input" /></div>
+                  <div class="a-form-group"><label>Phone Number</label><input type="text" id="card_phone" class="a-input" /></div>
+                  <div class="a-form-group" style="grid-column:1/-1;"><label>Full Billing Address</label><input type="text" id="card_addr" class="a-input" placeholder="Street, City, State, ZIP, Country" /></div>
+                </div>
+              </div>
+
+              <!-- RDP -->
+              <div id="fields-rdp" class="tool-subfields" style="display:none;">
+                <div class="a-form-grid">
+                  <div class="a-form-group"><label>IP / Hostname</label><input type="text" id="rdp_ip" class="a-input" placeholder="192.168.1.1:3389" /></div>
+                  <div class="a-form-group"><label>Username</label><input type="text" id="rdp_user" class="a-input" value="Administrator" /></div>
+                  <div class="a-form-group"><label>Password</label><input type="text" id="rdp_pass" class="a-input" /></div>
+                </div>
+              </div>
+
+              <!-- SMTP -->
+              <div id="fields-smtp" class="tool-subfields" style="display:none;">
+                <div class="a-form-grid">
+                  <div class="a-form-group"><label>SMTP Host</label><input type="text" id="smtp_host" class="a-input" placeholder="smtp.example.com" /></div>
+                  <div class="a-form-group"><label>SMTP Port</label><input type="text" id="smtp_port" class="a-input" placeholder="587" /></div>
+                  <div class="a-form-group"><label>Secure</label><input type="text" id="smtp_secure" class="a-input" placeholder="tls / ssl / none" /></div>
+                  <div class="a-form-group"><label>Username / Email</label><input type="text" id="smtp_user" class="a-input" /></div>
+                  <div class="a-form-group"><label>Password</label><input type="text" id="smtp_pass" class="a-input" /></div>
+                </div>
+              </div>
+
+              <!-- Cheque -->
+              <div id="fields-cheque" class="tool-subfields" style="display:none;">
+                <div class="a-form-grid">
+                  <div class="a-form-group">
+                    <label>Front of Cheque</label>
+                    <input type="file" id="cheque_front_file" accept="image/*" class="a-input" />
+                    <input type="hidden" id="cheque_front_url" />
+                    <div class="cheque-preview" id="front-preview"><img src="" alt="front" /></div>
+                  </div>
+                  <div class="a-form-group">
+                    <label>Back of Cheque</label>
+                    <input type="file" id="cheque_back_file" accept="image/*" class="a-input" />
+                    <input type="hidden" id="cheque_back_url" />
+                    <div class="cheque-preview" id="back-preview"><img src="" alt="back" /></div>
+                  </div>
+                </div>
+                <div style="margin-top:0.75rem;display:flex;align-items:center;gap:0.75rem;">
+                  <button type="button" id="upload-cheques-btn" class="a-btn a-btn-outline a-btn-sm" onclick="performChequeUpload()">Upload Images</button>
+                  <span id="cheque-upload-status" style="font-size:0.8rem;color:#6b7280;">Not uploaded</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:1rem;align-items:center;">
               <button type="submit" class="a-btn a-btn-primary">Save Product</button>
-              <span id="product-form-msg" style="font-size:0.875rem; color: #10b981; display:none;">✓ Product created!</span>
+              <span id="product-form-msg" style="font-size:0.875rem;color:#16a34a;display:none;">Product created!</span>
             </div>
+
           </form>
         </div>
       </div>
@@ -88,4 +202,3 @@
   </div>
 </body>
 </html>
-

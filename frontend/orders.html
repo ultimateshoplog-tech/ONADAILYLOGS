@@ -1,104 +1,109 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Orders – LogNest</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>My Orders – On A Daily Logs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script src="js/toast.js"></script>
   <script src="js/config.js"></script>
   <script src="js/nav.js"></script>
   <style>
-    .orders-wrap { max-width: 860px; margin: 0 auto; padding: 0.6rem 1rem 2.5rem; }
+    .orders-wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
 
     /* Header */
-    .o-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:1.25rem; }
-    .o-title   { font-size:1.35rem; font-weight:800; color:var(--primary-deep); letter-spacing:-0.3px; }
-    .o-sub     { font-size:0.78rem; color:var(--text-muted); margin-top:0.1rem; }
+    .o-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:2rem; }
+    .o-title   { font-size:1.6rem; font-weight:800; color:var(--primary-deep); letter-spacing:-0.03em; }
+    .o-sub     { font-size:0.88rem; color:var(--text-muted); margin-top:0.25rem; }
 
     /* Stat row */
-    .o-stats { display:flex; gap:0.65rem; margin-bottom:1.25rem; flex-wrap:wrap; }
+    .o-stats { display:flex; gap:1.25rem; margin-bottom:2rem; flex-wrap:wrap; }
     .o-stat {
-      flex:1; min-width:120px;
-      background:var(--bg-card); border:1px solid var(--border-soft); border-radius:10px;
-      padding:0.7rem 1rem; display:flex; align-items:center; gap:0.65rem;
+      flex:1; min-width:200px;
+      background:var(--bg-card); border:1px solid var(--border-soft); border-radius:14px;
+      padding:1.25rem 1.5rem; display:flex; flex-direction:column; gap:0.4rem;
+      box-shadow: var(--shadow-sm);
     }
-    .o-stat-icon { font-size:1.1rem; flex-shrink:0; }
-    .o-stat-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--text-muted); }
-    .o-stat-val   { font-size:1.05rem; font-weight:800; color:var(--primary-deep); line-height:1; margin-top:0.1rem; }
+    .o-stat-label { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); }
+    .o-stat-val   { font-size:1.5rem; font-weight:800; color:var(--primary-deep); line-height:1.1; }
 
     /* Table card */
     .o-card {
       background:var(--bg-card); border:1px solid var(--border-soft);
-      border-radius:12px; overflow:hidden; box-shadow:var(--shadow-soft);
+      border-radius:14px; overflow:hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.015);
     }
 
     /* Table */
-    .o-table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+    .o-table { width:100%; border-collapse:collapse; font-size:0.88rem; }
     .o-table th {
-      padding:0.6rem 0.9rem; text-align:left;
-      font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
-      color:var(--primary-deep); background:var(--bg-accent);
+      padding:0.9rem 1.25rem; text-align:left;
+      font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--text-muted); background:var(--bg-accent);
       border-bottom:1px solid var(--border-soft);
     }
-    .o-table td { padding:0.65rem 0.9rem; border-bottom:1px solid var(--border-soft); color:var(--text-main); vertical-align:middle; }
+    .o-table td { padding:1rem 1.25rem; border-bottom:1px solid var(--border-soft); color:var(--text-main); vertical-align:middle; }
     .o-table tbody tr:last-child td { border-bottom:none; }
-    .o-table tbody tr { cursor:pointer; transition:background .15s; }
+    .o-table tbody tr { cursor:pointer; transition:background var(--transition-smooth); }
     .o-table tbody tr:hover td { background:var(--bg-accent); }
 
     /* ID pill */
     .o-id {
-      font-family:monospace; font-size:0.7rem; font-weight:700;
-      background:var(--bg-accent); color:var(--primary-deep);
-      padding:0.12rem 0.4rem; border-radius:4px;
+      font-family:monospace; font-size:0.75rem; font-weight:700;
+      background:var(--bg-accent); color:var(--primary);
+      padding:0.2rem 0.5rem; border-radius:6px;
+      border: 1px solid var(--border-soft);
     }
 
     /* Status badge */
     .o-badge {
-      display:inline-flex; align-items:center; gap:0.25rem;
-      padding:0.14rem 0.55rem; border-radius:99px;
-      font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+      display:inline-flex; align-items:center;
+      padding:0.22rem 0.75rem; border-radius:99px;
+      font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
       white-space:nowrap;
     }
-    .ob-completed { background:rgba(22,163,74,.1); color:#15803d; border:1px solid rgba(22,163,74,.2); }
-    .ob-refunded  { background:rgba(99,102,241,.1); color:#4338ca; border:1px solid rgba(99,102,241,.2); }
-    .ob-pending   { background:rgba(217,119,6,.1);  color:#b45309; border:1px solid rgba(217,119,6,.2); }
-    .ob-cancelled { background:rgba(185,28,28,.1);  color:#b91c1c; border:1px solid rgba(185,28,28,.2); }
+    .ob-completed { background:rgba(16,185,129,.08); color:#10B981; border:1px solid rgba(16,185,129,.15); }
+    .ob-refunded  { background:rgba(99,102,241,.08); color:#6366F1; border:1px solid rgba(99,102,241,.15); }
+    .ob-pending   { background:rgba(245,158,11,.08);  color:#F59E0B; border:1px solid rgba(245,158,11,.15); }
+    .ob-cancelled { background:rgba(239,68,68,.08);  color:#EF4444; border:1px solid rgba(239,68,68,.15); }
 
     /* View btn */
     .o-view {
-      font-size:0.72rem; font-weight:600; color:var(--primary);
-      padding:0.25rem 0.6rem; border:1px solid var(--border-soft);
-      border-radius:6px; text-decoration:none; background:var(--bg-card);
-      display:inline-block; transition:all .18s;
+      font-size:0.75rem; font-weight:600; color:var(--primary);
+      padding:0.35rem 0.75rem; border:1px solid var(--border-soft);
+      border-radius:8px; text-decoration:none; background:var(--bg-card);
+      display:inline-block; transition:all var(--transition-smooth);
     }
     .o-view:hover { border-color:var(--primary); background:var(--bg-accent); }
 
     /* Pagination bar */
     .o-pagination {
       display:flex; align-items:center; justify-content:space-between;
-      padding:0.65rem 0.9rem; border-top:1px solid var(--border-soft);
+      padding:1rem 1.25rem; border-top:1px solid var(--border-soft);
       flex-wrap:wrap; gap:0.5rem;
     }
-    .o-pg-info { font-size:0.75rem; color:var(--text-muted); }
-    .o-pg-btns { display:flex; gap:0.4rem; align-items:center; }
+    .o-pg-info { font-size:0.8rem; color:var(--text-muted); font-weight: 500; }
+    .o-pg-btns { display:flex; gap:0.5rem; align-items:center; }
     .o-pg-btn {
-      padding:0.28rem 0.75rem; border-radius:7px;
+      padding:0.4rem 0.9rem; border-radius:8px;
       border:1px solid var(--border-soft); background:var(--bg-card);
-      font-size:0.75rem; font-weight:600; cursor:pointer;
-      color:var(--text-main); transition:all .18s; font-family:inherit;
+      font-size:0.78rem; font-weight:600; cursor:pointer;
+      color:var(--text-main); transition:all var(--transition-smooth); font-family:inherit;
     }
     .o-pg-btn:disabled { opacity:.38; cursor:not-allowed; }
     .o-pg-btn:not(:disabled):hover { border-color:var(--primary); color:var(--primary); background:var(--bg-accent); }
-    .o-pg-label { font-size:0.75rem; font-weight:600; color:var(--text-muted); padding:0 0.2rem; }
+    .o-pg-label { font-size:0.78rem; font-weight:600; color:var(--text-muted); padding:0 0.3rem; }
 
     /* Empty */
-    .o-empty { text-align:center; padding:3rem 1rem; }
-    .o-empty-icon { font-size:2.2rem; margin-bottom:0.65rem; opacity:.5; }
-    .o-empty h3 { font-size:1rem; color:var(--text-main); margin-bottom:0.3rem; }
-    .o-empty p  { font-size:0.82rem; color:var(--text-muted); margin-bottom:1.1rem; }
+    .o-empty {
+      text-align:center; padding:4rem 2rem;
+      border: 2px dashed var(--border-soft);
+      border-radius: 14px;
+      margin: 1.5rem;
+    }
+    .o-empty h3 { font-size:1.15rem; color:var(--text-main); margin-bottom:0.4rem; font-weight: 700; }
+    .o-empty p  { font-size:0.88rem; color:var(--text-muted); margin-bottom:1.5rem; }
 
     /* Dark mode compat */
     body.dark-mode .o-stat  { background:var(--bg-card); }
@@ -174,7 +179,8 @@
   <header class="header">
     <div class="container nav-container">
       <a href="index.html" class="logo">
-        <img src="images/logo.png" alt="Logo" class="nav-logo" onerror="this.style.display='none'" />
+        <img src="images/logo.jpg" class="logo-img" alt="Logo">
+        <span>On A Daily Logs</span>
       </a>
       <nav><ul class="nav-list" id="main-nav"></ul></nav>
     </div>
@@ -195,25 +201,16 @@
       <!-- Stats -->
       <div class="o-stats">
         <div class="o-stat">
-          <span class="o-stat-icon">📦</span>
-          <div>
-            <div class="o-stat-label">Orders</div>
-            <div class="o-stat-val" id="stat-total">—</div>
-          </div>
+          <div class="o-stat-label">Orders</div>
+          <div class="o-stat-val" id="stat-total">—</div>
         </div>
         <div class="o-stat">
-          <span class="o-stat-icon">💵</span>
-          <div>
-            <div class="o-stat-label">Spent</div>
-            <div class="o-stat-val" id="stat-spent" style="color:#15803d;">—</div>
-          </div>
+          <div class="o-stat-label">Spent</div>
+          <div class="o-stat-val" id="stat-spent" style="color:#10B981;">—</div>
         </div>
         <div class="o-stat">
-          <span class="o-stat-icon">💳</span>
-          <div>
-            <div class="o-stat-label">Balance</div>
-            <div class="o-stat-val" id="stat-balance" style="color:var(--primary);">—</div>
-          </div>
+          <div class="o-stat-label">Balance</div>
+          <div class="o-stat-val" id="stat-balance" style="color:var(--primary);">—</div>
         </div>
       </div>
 
@@ -249,7 +246,7 @@
   </main>
 
   <footer class="footer">
-    <div class="container"><p>&copy; 2026 LogNest. All rights reserved.</p> </div>
+    <div class="container"><p>&copy; 2026 On A Daily Logs. All rights reserved.</p> </div>
   </footer>
 
   <script>
@@ -258,10 +255,10 @@
     let allOrders   = [];
 
     const STATUS = {
-      completed: { cls:'ob-completed', dot:'◉', label:'Completed' },
-      refunded:  { cls:'ob-refunded',  dot:'←©', label:'Refunded'  },
-      pending:   { cls:'ob-pending',   dot:'◉', label:'Pending'   },
-      cancelled: { cls:'ob-cancelled', dot:'✕', label:'Cancelled' },
+      completed: { cls:'ob-completed', label:'Completed' },
+      refunded:  { cls:'ob-refunded',  label:'Refunded'  },
+      pending:   { cls:'ob-pending',   label:'Pending'   },
+      cancelled: { cls:'ob-cancelled', label:'Cancelled' },
     };
 
     function renderPage(page) {
@@ -276,9 +273,9 @@
       info.textContent = `${start + 1}–${Math.min(start + PAGE_SIZE, total)} of ${total}`;
 
       btns.innerHTML = `
-        <button class="o-pg-btn" onclick="renderPage(${page-1})" ${page<=1?'disabled':''}>← Prev</button>
+        <button class="o-pg-btn" onclick="renderPage(${page-1})" ${page<=1?'disabled':''}>Prev</button>
         <span class="o-pg-label">Page ${page} / ${pages}</span>
-        <button class="o-pg-btn" onclick="renderPage(${page+1})" ${page>=pages?'disabled':''}>Next ←’</button>
+        <button class="o-pg-btn" onclick="renderPage(${page+1})" ${page>=pages?'disabled':''}>Next</button>
       `;
 
       if (!rows.length) {
@@ -287,7 +284,7 @@
       }
 
       tbody.innerHTML = rows.map(o => {
-        const s    = STATUS[o.status] || { cls:'ob-pending', dot:'◉', label: o.status };
+        const s    = STATUS[o.status] || { cls:'ob-pending', label: o.status };
         const name = o.product_name || 'N/A';
         const show = name.length > 42 ? name.slice(0, 39) + '…' : name;
         const date = new Date(o.created_at).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
@@ -297,10 +294,10 @@
             <td data-label="Product" style="max-width:210px;" title="${name}">${show}</td>
             <td data-label="Qty" style="text-align:center;color:var(--text-muted);">${o.quantity}</td>
             <td data-label="Date" style="white-space:nowrap;color:var(--text-muted);">${date}</td>
-            <td data-label="Amount" style="font-weight:700;color:#15803d;">$${parseFloat(o.total).toFixed(2)}</td>
-            <td data-label="Status"><span class="o-badge ${s.cls}">${s.dot} ${s.label}</span></td>
+            <td data-label="Amount" style="font-weight:700;color:#10B981;">$${parseFloat(o.total).toFixed(2)}</td>
+            <td data-label="Status"><span class="o-badge ${s.cls}">${s.label}</span></td>
             <td onclick="event.stopPropagation()">
-              <a href="order-detail.html?id=${o.id}" class="o-view">View ←’</a>
+              <a href="order-detail.html?id=${o.id}" class="o-view">View</a>
             </td>
           </tr>`;
       }).join('');
@@ -330,7 +327,6 @@
           document.getElementById('orders-tbody').innerHTML = `
             <tr><td colspan="7">
               <div class="o-empty">
-                <div class="o-empty-icon">📦</div>
                 <h3>No orders yet</h3>
                 <p>Browse the store to make your first purchase.</p>
                 <a href="store.html" class="btn btn-primary" style="font-size:0.82rem;padding:0.5rem 1.1rem;">Browse Store</a>

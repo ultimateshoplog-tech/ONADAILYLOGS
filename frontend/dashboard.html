@@ -4,147 +4,116 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard – LogNest</title>
-  <meta name="description" content="Your LogNest account dashboard — orders and quick actions." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>Dashboard — On A Daily Logs</title>
+  <meta name="description" content="Your account dashboard." />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script src="js/config.js"></script>
   <script src="js/nav.js"></script>
   <style>
-    /* ── Layout ── */
     .dash-grid {
       display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 1.25rem;
+      grid-template-columns: 1fr 320px;
+      gap: 2rem;
       align-items: start;
     }
-    .dash-left  { display: flex; flex-direction: column; gap: 1.25rem; }
-    .dash-right { display: flex; flex-direction: column; gap: 1.25rem; }
+    .dash-left  { display: flex; flex-direction: column; gap: 2rem; }
+    .dash-right { display: flex; flex-direction: column; gap: 2rem; }
 
     /* ── Welcome Banner ── */
     .welcome-banner {
-      background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary) 100%);
-      border-radius: 16px;
-      padding: 1.5rem 2rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
       display: flex; justify-content: space-between; align-items: center;
       gap: 1rem; flex-wrap: wrap;
-      position: relative; overflow: hidden;
+      color: #ffffff;
+      box-shadow: 0 10px 25px -5px rgba(90, 49, 244, 0.2);
     }
-    .welcome-banner::before {
-      content: '';
-      position: absolute; top: -40%; right: -5%;
-      width: 280px; height: 280px;
-      background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
-      border-radius: 50%;
-    }
-    .welcome-text h2 { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.3rem; }
-    .welcome-text p  { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+    .welcome-text h2 { font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-bottom: 0.35rem; }
+    .welcome-text p  { font-size: 0.9rem; color: rgba(255, 255, 255, 0.85); }
     .welcome-badge {
-      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 20px; padding: 0.35rem 1rem;
-      font-size: 0.78rem; font-weight: 700; color: #fff; white-space: nowrap;
+      background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius-pill); padding: 0.45rem 1.25rem;
+      font-size: 0.8rem; font-weight: 700; color: #ffffff; white-space: nowrap;
     }
 
     /* ── Quick Actions ── */
-    .section-title { font-size: 0.78rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.06em; margin-bottom: 0.75rem; }
-    .actions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+    .section-title { font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .actions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     .action-card {
       background: var(--bg-card); border: 1px solid var(--border-soft);
-      border-radius: 14px; padding: 1.1rem;
-      display: flex; align-items: center; gap: 0.85rem;
+      border-radius: var(--radius-md); padding: 1.5rem;
+      display: flex; flex-direction: column; gap: 0.25rem;
       text-decoration: none; cursor: pointer;
-      transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+      transition: all var(--transition-smooth);
     }
-    .action-card:hover { box-shadow: 0 6px 20px rgba(44,36,22,0.09); border-color: var(--primary); transform: translateY(-1px); }
-    .action-icon {
-      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
-      background: var(--bg-accent); border: 1px solid var(--border-soft);
-    }
-    .action-label { font-size: 0.88rem; font-weight: 700; color: var(--text-main); }
-    .action-sub   { font-size: 0.76rem; color: var(--text-muted); margin-top: 0.1rem; }
+    .action-card:hover { border-color: var(--primary); box-shadow: 0 10px 30px rgba(90, 49, 244, 0.04); transform: translateY(-2px); }
+    .action-label { font-size: 0.95rem; font-weight: 700; color: var(--primary); }
+    .action-sub   { font-size: 0.8rem; color: var(--text-muted); }
 
     /* ── Account Info ── */
     .info-card {
       background: var(--bg-card); border: 1px solid var(--border-soft);
-      border-radius: 14px; padding: 1.25rem;
+      border-radius: var(--radius-lg); padding: 1.75rem;
     }
     .info-avatar {
-      width: 52px; height: 52px; border-radius: 50%;
-      background: var(--primary-deep); color: #fff;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%); color: #fff;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem; font-weight: 800; margin-bottom: 0.85rem;
+      font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(90, 49, 244, 0.2);
     }
-    .info-name  { font-size: 1rem; font-weight: 800; color: var(--text-main); }
-    .info-email { font-size: 0.8rem; color: var(--text-muted); margin: 0.1rem 0 0.75rem; }
-    .info-row   { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 0.55rem 0; border-top: 1px solid var(--border-soft); }
+    .info-name  { font-size: 1.1rem; font-weight: 800; color: var(--primary-deep); }
+    .info-email { font-size: 0.85rem; color: var(--text-muted); margin: 0.15rem 0 1rem; }
+    .info-row   { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 0.75rem 0; border-top: 1px solid var(--border-soft); }
     .info-row span:first-child { color: var(--text-muted); }
-    .info-row span:last-child  { font-weight: 600; color: var(--text-main); }
+    .info-row span:last-child  { font-weight: 600; color: var(--primary-deep); }
+    
     .role-badge {
       display: inline-flex; align-items: center;
-      background: #dbeafe; color: #1d4ed8;
-      border-radius: 20px; padding: 0.15rem 0.65rem;
+      background: rgba(90, 49, 244, 0.08); color: var(--primary);
+      border-radius: var(--radius-pill); padding: 0.15rem 0.65rem;
       font-size: 0.72rem; font-weight: 800; text-transform: capitalize;
     }
 
     /* ── Security Tips ── */
     .security-card {
       background: var(--bg-card); border: 1px solid var(--border-soft);
-      border-radius: 14px; padding: 1.25rem;
+      border-radius: var(--radius-lg); padding: 1.75rem;
     }
     .security-item {
-      display: flex; align-items: flex-start; gap: 0.75rem;
-      padding: 0.6rem 0; border-top: 1px solid var(--border-soft);
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 0.75rem 0; border-top: 1px solid var(--border-soft);
     }
     .security-item:first-of-type { border-top: none; padding-top: 0.25rem; }
-    .security-dot {
-      width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
-      background: var(--bg-accent); border: 1px solid var(--border-soft);
-      display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
-    }
-    .security-text strong { font-size: 0.82rem; color: var(--text-main); display: block; }
-    .security-text span   { font-size: 0.76rem; color: var(--text-muted); }
+    .security-text strong { font-size: 0.88rem; color: var(--primary-deep); display: block; margin-bottom: 0.15rem; }
+    .security-text span   { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
 
     /* ── Support Card ── */
     .support-card {
-      background: linear-gradient(135deg, #0088cc11 0%, #0088cc08 100%);
-      border: 1.5px solid #0088cc33;
-      border-radius: 14px;
-      padding: 1.25rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-left: 4px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
       text-align: center;
+      display: block;
+      text-decoration: none;
+      transition: all var(--transition-smooth);
     }
-    .support-card .tg-icon {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: #0088cc; display: flex; align-items: center;
-      justify-content: center; margin: 0 auto 0.75rem;
-    }
-    .support-card .tg-icon svg { fill: #fff; width: 26px; height: 26px; }
-    .support-card h4 { font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem; }
-    .support-card p  { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; }
-    .tg-btn {
-      display: inline-flex; align-items: center; gap: 0.45rem;
-      background: #0088cc; color: #fff;
-      border-radius: 10px; padding: 0.6rem 1.2rem;
-      font-size: 0.88rem; font-weight: 700;
-      text-decoration: none; transition: background 0.2s, transform 0.15s;
-    }
-    .tg-btn svg { fill: #fff; width: 16px; height: 16px; flex-shrink: 0; }
-    .tg-btn:hover { background: #0077b5; transform: translateY(-1px); }
-    a.support-card {
-      display: block; text-decoration: none;
-      cursor: pointer;
-      transition: all 0.22s;
-    }
-    a.support-card:hover {
-      border-color: #0088cc;
-      box-shadow: 0 8px 24px rgba(0,136,204,0.18);
+    .support-card:hover {
+      border-color: var(--primary);
+      border-left-color: var(--primary-hover);
+      box-shadow: 0 10px 30px rgba(90, 49, 244, 0.06);
       transform: translateY(-2px);
     }
-    a.support-card h4, a.support-card p { pointer-events: none; }
+    .support-card h4 { font-size: 1rem; font-weight: 800; color: var(--primary-deep); margin-bottom: 0.35rem; }
+    .support-card p  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem; }
 
     @media (max-width: 900px) {
       .dash-grid    { grid-template-columns: 1fr; }
-      .actions-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 500px) {
       .actions-grid { grid-template-columns: 1fr; }
@@ -155,102 +124,80 @@
   <header class="header">
     <div class="container nav-container">
       <a href="index.html" class="logo">
-        <img src="images/logo.png" alt="LogNest" class="nav-logo" onerror="this.style.display='none'" />
+        <img src="images/logo.jpg" class="logo-img" alt="Logo">
+        <span>On A Daily Logs</span>
       </a>
       <nav><ul class="nav-list" id="main-nav"></ul></nav>
     </div>
   </header>
 
-  <main class="main-content container" style="padding-top:1.25rem;">
+  <main class="main-content container">
 
     <!-- ── 1. Welcome Banner ── -->
-    <div class="welcome-banner" style="margin-bottom:1.25rem;">
+    <div class="welcome-banner anim-slide-up" style="margin-bottom: 2rem;">
       <div class="welcome-text">
-        <h2 id="welcome-name">Welcome back 👋</h2>
-        <p id="welcome-sub">Member since — · Account in good standing</p>
+        <h2 id="welcome-name">Welcome back</h2>
+        <p id="welcome-sub">Account in good standing</p>
       </div>
-      <span class="welcome-badge" id="welcome-role">User</span>
+      <span class="welcome-badge" id="welcome-role">Member</span>
     </div>
 
     <div class="dash-grid">
-      <div class="dash-left">
+      <div class="dash-left anim-slide-up delay-1">
 
         <!-- ── 2. Quick Actions ── -->
         <div>
           <div class="section-title">Quick Actions</div>
           <div class="actions-grid">
             <a href="store.html" class="action-card">
-              <div class="action-icon">🏪</div>
-              <div>
-                <div class="action-label">Browse Store</div>
-                <div class="action-sub">View available logs</div>
-              </div>
+              <span class="action-label">Browse Store</span>
+              <span class="action-sub">View and filter bank logs</span>
             </a>
             <a href="orders.html" class="action-card">
-              <div class="action-icon">📦</div>
-              <div>
-                <div class="action-label">My Orders</div>
-                <div class="action-sub">View purchase history</div>
-              </div>
+              <span class="action-label">My Orders</span>
+              <span class="action-sub">Access your purchases</span>
             </a>
             <a href="add-funds.html" class="action-card">
-              <div class="action-icon">💰</div>
-              <div>
-                <div class="action-label">Add Funds</div>
-                <div class="action-sub">Top up via crypto</div>
-              </div>
+              <span class="action-label">Add Funds</span>
+              <span class="action-sub">Top up balance via crypto</span>
             </a>
             <a href="cart.html" class="action-card">
-              <div class="action-icon">🛒</div>
-              <div>
-                <div class="action-label">Your Cart</div>
-                <div class="action-sub">Review &amp; checkout</div>
-              </div>
+              <span class="action-label">Your Cart</span>
+              <span class="action-sub">Review item checkout</span>
             </a>
-            
           </div>
         </div>
 
-        <!-- ── 3. Security Tips ── -->
+        <!-- ── 3. Security Info ── -->
         <div class="security-card">
-          <div class="section-title">Security Tips</div>
+          <div class="section-title">Security Guidelines</div>
           <div class="security-item">
-            <div class="security-dot">🔒</div>
             <div class="security-text">
               <strong>Never share your credentials</strong>
-              <span>Keep login details private at all times.</span>
+              <span>Keep your login details and account balances strictly confidential at all times.</span>
             </div>
           </div>
           <div class="security-item">
-            <div class="security-dot">📧</div>
             <div class="security-text">
               <strong>Use a dedicated email</strong>
-              <span>Don't use your main personal inbox.</span>
+              <span>We recommend using a privacy-focused email service rather than your main inbox.</span>
             </div>
           </div>
           <div class="security-item">
-            <div class="security-dot">🚪</div>
             <div class="security-text">
               <strong>Log out after each session</strong>
-              <span>Especially on shared devices.</span>
-            </div>
-          </div>
-          <div class="security-item">
-            <div class="security-dot">💾</div>
-            <div class="security-text">
-              <strong>Back up purchased logs</strong>
-              <span>Save copies in a secure, offline location.</span>
+              <span>Always log out when you finish, especially if you access your account from a shared device.</span>
             </div>
           </div>
         </div>
 
       </div><!-- /.dash-left -->
 
-      <div class="dash-right">
+      <div class="dash-right anim-slide-up delay-2">
 
         <!-- ── 3. Account Info ── -->
         <div class="info-card">
-          <div class="section-title">Account</div>
+          <div class="section-title">Account Details</div>
           <div class="info-avatar" id="account-avatar">U</div>
           <div class="info-name"  id="account-name">—</div>
           <div class="info-email" id="account-email">—</div>
@@ -260,7 +207,7 @@
           </div>
           <div class="info-row">
             <span>Status</span>
-            <span style="color:#16a34a; font-weight:700;">● Active</span>
+            <span style="color:#10B981; font-weight:700;">● Active</span>
           </div>
           <div class="info-row">
             <span>Member Since</span>
@@ -268,14 +215,12 @@
           </div>
         </div>
 
-        <!-- ── Support Card (fully clickable) ── -->
-        <a href="https://t.me/lognest_admin" target="_blank" rel="noopener" class="support-card">
-          <div class="tg-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" style="fill:currentColor;flex-shrink:0;vertical-align:middle;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
-          <h4>Need Help?</h4>
-          <p>Have a question about your order or deposit? Our support team is on Telegram.</p>
-          <span class="tg-btn" style="margin-top:0.25rem;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-            Chat on Telegram
+        <!-- ── Support Card ── -->
+        <a href="https://t.me/UltimateDailyLogs" target="_blank" rel="noopener" class="support-card">
+          <h4>Need Assistance?</h4>
+          <p>For questions about orders, wallet deposits, or balances, chat with support directly.</p>
+          <span class="btn btn-primary" style="width: 100%; font-size: 0.85rem; padding: 0.55rem;">
+            Telegram Support
           </span>
         </a>
 
@@ -285,7 +230,7 @@
   </main>
 
   <footer class="footer">
-    <div class="container"><p>&copy; 2026 LogNest. All rights reserved.</p> </div>
+    <div class="container"><p>&copy; 2026 On A Daily Logs. All rights reserved.</p> </div>
   </footer>
 
   <script>
@@ -294,8 +239,8 @@
       if (!user) return;
 
       // Welcome banner
-      document.getElementById('welcome-name').textContent = `Welcome back, ${user.username} 👋`;
-      document.getElementById('welcome-role').textContent = user.role === 'admin' ? '🛡 Admin' : '✓ Member';
+      document.getElementById('welcome-name').textContent = `Welcome back, ${user.username}`;
+      document.getElementById('welcome-role').textContent = user.role === 'admin' ? '🛡 Admin' : 'Member';
       const since = user.created_at
         ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
         : '—';

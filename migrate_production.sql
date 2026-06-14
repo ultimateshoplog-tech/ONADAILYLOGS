@@ -1,5 +1,5 @@
 -- ============================================================
--- LogNest — Production Migration Script
+-- On A Daily Logs — Production Migration Script
 -- Run ONCE on your live database after deployment.
 -- Usage: psql $DATABASE_URL -f migrate_production.sql
 -- ============================================================

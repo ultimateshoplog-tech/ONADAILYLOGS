@@ -1,12 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/images/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profile – LogNest</title>
-  <meta name="description" content="Manage your LogNest profile, update account details, and change your password." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>Profile – On A Daily Logs</title>
+  <meta name="description" content="Manage your On A Daily Logs profile, update account details, and change your password." />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script src="js/config.js"></script>
   <script src="js/nav.js"></script>
@@ -31,7 +31,7 @@
       background: linear-gradient(135deg, var(--primary-deep), var(--primary));
       color: #fff; display: flex; align-items: center; justify-content: center;
       font-size: 2rem; font-weight: 800; margin: 0 auto 1rem;
-      box-shadow: 0 6px 20px rgba(13,79,79,0.2);
+      box-shadow: 0 6px 20px rgba(90, 49, 244, 0.2);
       border: 3px solid var(--bg-main);
     }
     .profile-name { font-size: 1.15rem; font-weight: 800; color: var(--text-main); }
@@ -139,7 +139,8 @@
   <header class="header">
     <div class="container nav-container">
       <a href="index.html" class="logo">
-        <img src="images/logo.png" alt="LogNest" class="nav-logo" onerror="this.style.display='none'" />
+        <img src="images/logo.jpg" class="logo-img" alt="Logo">
+        <span>On A Daily Logs</span>
       </a>
       <nav><ul class="nav-list" id="main-nav"></ul></nav>
     </div>
@@ -230,19 +231,7 @@
           </form>
         </div>
 
-        <!-- Session Info -->
-        <div class="profile-section">
-          <div class="section-head">
-            <div class="section-head-icon">🛡</div>
-            <div>
-              <h3>Session & Security</h3>
-              <p>Current session details</p>
-            </div>
-          </div>
-          <div class="session-row"><span class="session-label">Login Status</span><span class="session-value active">● Logged In</span></div>
-          <div class="session-row"><span class="session-label">Token Expires</span><span class="session-value" id="pf-token-exp">—</span></div>
-          <div class="session-row"><span class="session-label">Account Role</span><span class="session-value" id="pf-session-role">user</span></div>
-        </div>
+
 
         <!-- Danger Zone -->
         <div class="profile-section danger-zone">
@@ -261,7 +250,7 @@
   </main>
 
   <footer class="footer">
-    <div class="container"><p>&copy; 2026 LogNest. All rights reserved.</p> </div>
+    <div class="container"><p>&copy; 2026 On A Daily Logs. All rights reserved.</p> </div>
   </footer>
 
   <script src="js/toast.js"></script>
@@ -282,14 +271,7 @@
       const since = user.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '—';
       document.getElementById('pf-since').textContent = since;
 
-      // ── Token expiry
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        if (payload.exp) {
-          document.getElementById('pf-token-exp').textContent = new Date(payload.exp * 1000).toLocaleString();
-        }
-      } catch {}
-      document.getElementById('pf-session-role').textContent = user.role || 'user';
+
 
       // ── Populate form fields
       const usernameInput = document.getElementById('input-username');
